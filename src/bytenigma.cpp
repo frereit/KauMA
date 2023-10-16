@@ -3,15 +3,27 @@
 
 #include "bytenigma.hpp"
 
-/// @brief Encrypt the given \p input using bytenigma encryption, given a
-/// set of \p rotors .
-/// @param input the input bytes to be encrypted (iteratively)
-/// @param rotors the initial rotor configuration
-/// @return the encrypted data
-std::vector<std::uint8_t>
-Bytenigma::bytenigma(const std::vector<std::uint8_t> &input,
-                     const std::vector<std::vector<std::uint8_t>> &rotors) {
+std::uint8_t Bytenigma::Bytenigma::process_byte(std::uint8_t input) {
   (void)input;
-  (void)rotors;
+  return std::uint8_t();
+}
+
+std::vector<std::uint8_t>
+Bytenigma::Bytenigma::process_bytes(const std::vector<std::uint8_t> &input) {
+  (void)input;
   return std::vector<std::uint8_t>();
+}
+
+std::uint8_t Bytenigma::Bytenigma::forward_pass(std::uint8_t input) {
+  (void)input;
+  return std::uint8_t();
+}
+
+std::uint8_t Bytenigma::Bytenigma::backward_pass(std::uint8_t input) {
+  (void)input;
+  return std::uint8_t();
+}
+
+void Bytenigma::Bytenigma::turn_rotor(const std::uint8_t &index) {
+  (void)index;
 }

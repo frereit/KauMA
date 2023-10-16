@@ -28,8 +28,9 @@ extern const std::map<std::string, Glue::glue_function> Glue::ACTIONS = {
            cppcodec::base64_rfc4648::decode(input["input"].get<std::string>());
        auto rotors =
            input["rotors"].get<std::vector<std::vector<std::uint8_t>>>();
+       Bytenigma::Bytenigma bytenigma = Bytenigma::Bytenigma(rotors);
        std::vector<std::uint8_t> raw_output =
-           Bytenigma::bytenigma(raw_input, rotors);
+           bytenigma.process_bytes(raw_input);
        json output = {{"output", cppcodec::base64_rfc4648::encode(raw_output)}};
        return output;
      }},

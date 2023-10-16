@@ -70,7 +70,10 @@ private:
   /// @param index the index of the rotor to turn.
   void turn_rotor(const std::uint8_t &index);
 
+  /// @brief the rotor positions of the machine
   const std::vector<std::vector<std::uint8_t>> m_rotors;
+
+  /// @brief the turn offset for each rotor
   std::vector<std::uint8_t> m_rotor_positions;
 };
 

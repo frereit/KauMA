@@ -29,7 +29,7 @@ Bytenigma::Bytenigma::process_bytes(const std::vector<std::uint8_t> &input) {
 }
 
 std::uint8_t Bytenigma::Bytenigma::forward_pass(std::uint8_t input) {
-  for (std::size_t i = 0; i < m_rotors.size(); ++i) {
+  for (std::size_t i : std::views::iota(0u, m_rotors.size())) {
     std::vector<std::uint8_t> rotor = m_rotors[i];
     std::uint8_t position = m_rotor_positions[i];
     input = rotor.at((input + position) % rotor.size());
@@ -60,7 +60,7 @@ void Bytenigma::Bytenigma::turn_rotor(const std::uint8_t &index) {
 
 void Bytenigma::Bytenigma::calculate_inverse_rotors() {
   m_inv_rotors = std::vector<std::vector<std::uint8_t>>(m_rotors.size());
-  for (std::size_t i = 0; i < m_rotors.size(); ++i) {
+  for (std::size_t i : std::views::iota(0u, m_rotors.size())) {
     auto inv_rotor = std::vector<std::uint8_t>(m_rotors.at(i).size());
     for (std::size_t in = 0; in < inv_rotor.size(); ++in) {
       inv_rotor.at(m_rotors.at(i).at(in)) = static_cast<std::uint8_t>(in);

@@ -41,14 +41,16 @@ debug: all
 release: CXXFLAGS += -O2
 release: all
 
-test: clean
-test: CXXFLAGS += -DTEST -g
-test: all
-test:
-	@echo Executing unit tests
+unittest: clean
+unittest: CXXFLAGS += -DTEST -g
+unittest: all
+unittest:
 	@$(APP_DIR)/$(TARGET)
-	@echo Executing system tests
+
+systemtest:
 	@./test.py
+
+test: unittest systemtest
 
 format:
 	-@clang-format -i $(SRC) $(HEADERS)

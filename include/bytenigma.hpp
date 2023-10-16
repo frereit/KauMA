@@ -28,10 +28,7 @@ class Bytenigma {
 public:
   /// @brief create a new bytenigma machine
   /// @param rotors the initial rotor configuration
-  Bytenigma(const std::vector<std::vector<std::uint8_t>> &rotors)
-      : m_rotors(rotors) {
-    m_rotor_positions = std::vector<std::uint8_t>(rotors.size());
-  }
+  Bytenigma(const std::vector<std::vector<std::uint8_t>> &rotors);
 
   /// @brief input a single byte into the machine, process it (modifying the
   /// internal state), and return the resulting byte.
@@ -70,8 +67,16 @@ private:
   /// @param index the index of the rotor to turn.
   void turn_rotor(const std::uint8_t &index);
 
+  /// @brief Ensure the `m_inv_rotors` field is populated according to the
+  /// current rotors
+  void calculate_inverse_rotors();
+
   /// @brief the rotor positions of the machine
   const std::vector<std::vector<std::uint8_t>> m_rotors;
+  
+  /// @brief a list of inverse mappings for each rotor. m_inv_rotors[0] still
+  /// gives the first rotor and m_rotors[m_inv_rotors[x]] == x.
+  std::vector<std::vector<std::uint8_t>> m_inv_rotors;
 
   /// @brief the turn offset for each rotor
   std::vector<std::uint8_t> m_rotor_positions;

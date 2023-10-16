@@ -2,6 +2,7 @@
 #include <nlohmann/json.hpp>
 #include <vector>
 
+#include "bytenigma.hpp"
 #include "cppcodec/base64_rfc4648.hpp"
 #include "glue.hpp"
 #include "noop.hpp"
@@ -11,7 +12,8 @@ using json = nlohmann::json;
 /// @brief the glue_functions generate the appropriate function arguments from
 /// the JSON structure and format the return value as appropriate JSON
 extern const std::map<std::string, Glue::glue_function> Glue::ACTIONS = {
-    {"noop", [](const json &input) {
+    {"noop",
+     [](const json &input) {
        std::vector<std::uint8_t> raw_input =
            cppcodec::base64_rfc4648::decode(input["input"].get<std::string>());
 
@@ -19,7 +21,19 @@ extern const std::map<std::string, Glue::glue_function> Glue::ACTIONS = {
 
        json output = {{"output", cppcodec::base64_rfc4648::encode(raw_output)}};
        return output;
-     }}};
+     }},
+    {"bytenigma",
+     [](const json &input) {
+       std::vector<std::uint8_t> raw_input =
+           cppcodec::base64_rfc4648::decode(input["input"].get<std::string>());
+       auto rotors =
+           input["rotors"].get<std::vector<std::vector<std::uint8_t>>>();
+       std::vector<std::uint8_t> raw_output =
+           Bytenigma::bytenigma(raw_input, rotors);
+       json output = {{"output", cppcodec::base64_rfc4648::encode(raw_output)}};
+       return output;
+     }},
+};
 
 /// @brief executes a specific action by parsing the arguments from the JSON and
 /// calling the correct library function

@@ -65,7 +65,7 @@ private:
   /// @brief Turn the rotor at the given \p index . This automatically turns the
   /// next rotor if an overflow occurred.
   /// @param index the index of the rotor to turn.
-  void turn_rotor(const std::uint8_t &index);
+  void turn_rotor(const std::size_t &index);
 
   /// @brief Ensure the `m_inv_rotors` field is populated according to the
   /// current rotors
@@ -73,7 +73,7 @@ private:
 
   /// @brief the rotor positions of the machine
   const std::vector<std::vector<std::uint8_t>> m_rotors;
-  
+
   /// @brief a list of inverse mappings for each rotor. m_inv_rotors[0] still
   /// gives the first rotor and m_rotors[m_inv_rotors[x]] == x.
   std::vector<std::vector<std::uint8_t>> m_inv_rotors;

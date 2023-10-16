@@ -38,7 +38,7 @@ std::uint8_t Bytenigma::Bytenigma::forward_pass(std::uint8_t input) {
 }
 
 std::uint8_t Bytenigma::Bytenigma::backward_pass(std::uint8_t input) {
-    // Walk backwards through the m_inv_rotors list (starting with rotor `n`)
+  // Walk backwards through the m_inv_rotors list (starting with rotor `n`)
   for (std::size_t i :
        std::views::iota(0u, m_inv_rotors.size()) | std::views::reverse) {
     std::vector<std::uint8_t> rotor = m_inv_rotors[i];
@@ -54,8 +54,17 @@ std::uint8_t Bytenigma::Bytenigma::backward_pass(std::uint8_t input) {
   return input;
 }
 
-void Bytenigma::Bytenigma::turn_rotor(const std::uint8_t &index) {
-  (void)index;
+void Bytenigma::Bytenigma::turn_rotor(const std::size_t &index) {
+  // Recursively turn the rotor at `index` and all rotors to the right of it as long as an overflow occurs
+  std::vector<std::uint8_t> rotor = m_rotors.at(index);
+  std::size_t old_position = m_rotor_positions.at(index);
+  m_rotor_positions.at(index) = (old_position + 1) % rotor.size();
+
+  // check if we also need to rotate the next rotor by checking
+  // if the top-most element is currently a 0
+  if (rotor.at(old_position) == 0 && (index + 1) < m_rotors.size()) {
+    this->turn_rotor(index + 1);
+  };
 }
 
 void Bytenigma::Bytenigma::calculate_inverse_rotors() {
@@ -112,7 +121,6 @@ TEST_CASE("test bytenigma inverted rotors are calculated correctly") {
     rotors.push_back(rotor);
   }
 
-
   auto inverted_rotors = std::vector<std::vector<std::uint8_t>>();
   for (std::size_t i = 0; i < 3; ++i) {
     auto rotor = std::vector<std::uint8_t>();
@@ -128,5 +136,28 @@ TEST_CASE("test bytenigma inverted rotors are calculated correctly") {
 
   Bytenigma::Bytenigma enigma = Bytenigma::Bytenigma(rotors);
   CHECK(enigma.m_inv_rotors == inverted_rotors);
+}
+
+TEST_CASE("test rotor rotations") {
+  auto rotors = std::vector<std::vector<std::uint8_t>>();
+  auto rotor = std::vector<std::uint8_t>();
+  for (std::size_t j = 0; j < 256; ++j) {
+    rotor.push_back(j); // 0->0, 1->1 and so on
+  }
+  rotors.push_back(rotor);
+  rotors.push_back(rotor);
+
+  auto rotor2 = std::vector<std::uint8_t>();
+  for (std::size_t j = 0; j < 256; ++j) {
+    rotor2.push_back((j + 1) % 256); // 0->0, 1->1 and so on
+  }
+  rotors.push_back(rotor2);
+  rotors.push_back(rotor2);
+
+  Bytenigma::Bytenigma enigma = Bytenigma::Bytenigma(rotors);
+  enigma.turn_rotor(0);
+  // both rotors should have been turned
+  std::vector<std::uint8_t> expected_positions = {1, 1, 1, 0};
+  CHECK(enigma.m_rotor_positions == expected_positions);
 }
 #endif

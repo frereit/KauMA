@@ -61,7 +61,7 @@ void Bytenigma::Bytenigma::calculate_inverse_rotors() {
 
 TEST_CASE("test bytenigma forward pass") {
   auto rotors = std::vector<std::vector<std::uint8_t>>();
-  for (size_t i = 0; i < 3; ++i) {
+  for (std::size_t i = 0; i < 3; ++i) {
     auto rotor = std::vector<std::uint8_t>();
     for (std::size_t j = 0; j < 256; ++j) {
       rotor.push_back((j + 1) % 256); // 0->1, 1->2 and so on

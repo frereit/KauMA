@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <ranges>
 #include <vector>
 
 #include "bytenigma.hpp"
@@ -37,8 +38,20 @@ std::uint8_t Bytenigma::Bytenigma::forward_pass(std::uint8_t input) {
 }
 
 std::uint8_t Bytenigma::Bytenigma::backward_pass(std::uint8_t input) {
-  (void)input;
-  return std::uint8_t();
+    // Walk backwards through the m_inv_rotors list (starting with rotor `n`)
+  for (std::size_t i :
+       std::views::iota(0u, m_inv_rotors.size()) | std::views::reverse) {
+    std::vector<std::uint8_t> rotor = m_inv_rotors[i];
+    std::uint8_t position = m_rotor_positions[i];
+    input = rotor.at((input) % rotor.size());
+
+    // Underflow is well-defined behavior:
+    // > Unsigned integers shall obey the laws of arithmetic modulo 2n where n
+    // is the number of bits in the value > representation of that particular
+    // size of integer.
+    input -= position;
+  }
+  return input;
 }
 
 void Bytenigma::Bytenigma::turn_rotor(const std::uint8_t &index) {
@@ -72,6 +85,21 @@ TEST_CASE("test bytenigma forward pass") {
   CHECK(enigma.forward_pass(0) == 3);
   CHECK(enigma.forward_pass(50) == 53);
   CHECK(enigma.forward_pass(255) == 2);
+}
+
+TEST_CASE("test bytenigma backward pass") {
+  auto rotors = std::vector<std::vector<std::uint8_t>>();
+  for (std::size_t i = 0; i < 3; ++i) {
+    auto rotor = std::vector<std::uint8_t>();
+    for (std::size_t j = 0; j < 256; ++j) {
+      rotor.push_back((j + 1) % 256); // 0->1, 1->2 and so on
+    }
+    rotors.push_back(rotor);
+  }
+  Bytenigma::Bytenigma enigma = Bytenigma::Bytenigma(rotors);
+  CHECK(enigma.backward_pass(3) == 0);
+  CHECK(enigma.backward_pass(53) == 50);
+  CHECK(enigma.backward_pass(2) == 255);
 }
 
 TEST_CASE("test bytenigma inverted rotors are calculated correctly") {

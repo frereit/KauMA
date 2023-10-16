@@ -45,7 +45,10 @@ test: clean
 test: CXXFLAGS += -DTEST -g
 test: all
 test:
+	@echo Executing unit tests
 	@$(APP_DIR)/$(TARGET)
+	@echo Executing system tests
+	@./test.py
 
 format:
 	-@clang-format -i $(SRC) $(HEADERS)

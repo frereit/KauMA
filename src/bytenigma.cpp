@@ -21,16 +21,16 @@ std::uint8_t Bytenigma::Bytenigma::process_byte(std::uint8_t input) {
 
 std::vector<std::uint8_t>
 Bytenigma::Bytenigma::process_bytes(const std::vector<std::uint8_t> &input) {
-  std::vector<std::uint8_t> output;
-  for (std::uint8_t byte : input) {
-    output.push_back(this->process_byte(byte));
+  auto output = std::vector<std::uint8_t>(input.size());
+  for (std::size_t i : std::views::iota(0u, input.size())) {
+    output.at(i) = (this->process_byte(input.at(i)));
   }
   return output;
 }
 
 std::uint8_t Bytenigma::Bytenigma::forward_pass(std::uint8_t input) {
   for (std::size_t i : std::views::iota(0u, m_rotors.size())) {
-    std::vector<std::uint8_t> rotor = m_rotors[i];
+    const std::vector<std::uint8_t> &rotor = m_rotors.at(i);
     std::uint8_t position = m_rotor_positions[i];
     input = rotor.at((input + position) % rotor.size());
   }
@@ -41,7 +41,7 @@ std::uint8_t Bytenigma::Bytenigma::backward_pass(std::uint8_t input) {
   // Walk backwards through the m_inv_rotors list (starting with rotor `n`)
   for (std::size_t i :
        std::views::iota(0u, m_inv_rotors.size()) | std::views::reverse) {
-    std::vector<std::uint8_t> rotor = m_inv_rotors[i];
+    const std::vector<std::uint8_t> &rotor = m_inv_rotors.at(i);
     std::uint8_t position = m_rotor_positions[i];
     input = rotor.at((input) % rotor.size());
 
@@ -55,8 +55,9 @@ std::uint8_t Bytenigma::Bytenigma::backward_pass(std::uint8_t input) {
 }
 
 void Bytenigma::Bytenigma::turn_rotor(const std::size_t &index) {
-  // Recursively turn the rotor at `index` and all rotors to the right of it as long as an overflow occurs
-  std::vector<std::uint8_t> rotor = m_rotors.at(index);
+  // Recursively turn the rotor at `index` and all rotors to the right of it as
+  // long as an overflow occurs
+  const std::vector<std::uint8_t> &rotor = m_rotors.at(index);
   std::size_t old_position = m_rotor_positions.at(index);
   m_rotor_positions.at(index) = (old_position + 1) % rotor.size();
 

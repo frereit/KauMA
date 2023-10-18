@@ -13,23 +13,23 @@ def main():
     for input_filename in glob("examples/**/*.in.json"):
         expected_filename = input_filename.removesuffix(".in.json") + ".out.json"
         proc = Popen(["out/apps/kauma", input_filename], stdout=PIPE, stderr=PIPE)
-        if proc.wait() != 0:
+        stdout, stderr = proc.communicate()
+        if proc.returncode != 0:
             failures.append(
                 (
                     input_filename,
-                    (proc.stdout.read().decode(), proc.stderr.read().decode()),
+                    (stdout, stderr),
                 )
             )
             continue
         with open(expected_filename) as f:
             expected = json.load(f)
-        stdout = proc.stdout.read().decode()
         actual = json.loads(stdout)
         if expected != actual:
             failures.append(
                 (
                     input_filename,
-                    (stdout, proc.stderr.read().decode()),
+                    (stdout, stderr),
                 )
             )
             continue
@@ -40,6 +40,8 @@ def main():
             print("STDOUT:", failure[1][0], "-" * 80, sep="\n")
             print("STDERR:", failure[1][1], "-" * 80, sep="\n")
         sys.exit(1)
+    else:
+        print("\033[92mALL TESTCASES PASSED!\033[0m")
  
 if __name__ == "__main__":
     main()

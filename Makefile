@@ -29,7 +29,7 @@ $(APP_DIR)/$(TARGET): $(OBJECTS)
 
 -include $(DEPENDENCIES)
 
-.PHONY: all build clean debug release info
+.PHONY: all build clean debug release info docs
 
 build:
 	@mkdir -p $(APP_DIR)
@@ -55,7 +55,7 @@ test: unittest systemtest
 format:
 	-@clang-format -i $(SRC) $(HEADERS)
 
-docs:
+docs: build
 	-@doxygen Doxyfile
 
 clean:

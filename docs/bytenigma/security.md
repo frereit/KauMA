@@ -2,7 +2,7 @@
 
 In this page, various possible attacks and weaknesses both on the BYTENIGMA algorithm itself and my implementation will be documented.
 
-### Indistinguishability & Bias
+## Indistinguishability & Bias
 
 There is a trivial bias in the output: Any given input byte \f$x\f$ can never be encrypted to itself. This can be proven as follows:
 
@@ -40,7 +40,7 @@ This shows that the null-byte appeared exactly zero times in the output.
 
 Due to this fact, indistinguishability is not given. A truly random output would have an equal distribution over all possible bytes, instead of excluding the input bytes.
 
-### Linear rotors
+## Linear rotors
 
 The security of the machine strictly depends on non-linearity of the rotors. This is simply demonstrated by constructing rotors in a strictly linear fashion and encryption 1 MiB null-bytes:
 

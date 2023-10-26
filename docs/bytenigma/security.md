@@ -73,3 +73,41 @@ plt.savefig("linear.png")
 ~~~~~~~~~~~~~
 
 ![Value of the first 512 output bytes encrypted using linear rotors](linear.png)
+
+## Finding the position of the 0 in the first rotor
+
+Using a chosen plaintext attack, it is trivial to find the index of the `0` in the first rotor.
+
+Finding the index of the `0` in the first rotor is equivalent to finding the index at which the second rotor turns. We know for a fact that this happens exactly once during the first 256 bytes encrypted using the machine.
+
+We can force the output of the first rotor during the forward pass to be the same in every one of those 256 encrypted bytes, simply by sending bytes in decending order. For example, if we encrypt the byte `0xff`, lets assume `rotor[0][0xff]` is some value \f$x\f$. After the byte is encrypted, the first rotor guaranteed to be turned by one. If the next encrypted byte sent is `0xfe`, it will be mapepd to `rotor[0][0xfe + 1]` (due to the rotation by one), which is equivalent to \f$x\f$.
+
+Once the output of the first rotor in the forward pass is the same, the path taken through the rest of the machine is guaranteed to be the same, as long as no other rotor turned. This means that the input to the first rotor in the backward pass is also guarnteed to be the same. Since between the two bytes `rotor[0]` was turned exactly by one, the same input \f$y\f$ will be mapped to \f$z\f$ and \f$z - 1\f$ respectively.
+
+Thus, when encrypting the sequence `[0xff, 0xfe, 0xfd, ..., 0]`, the output will be linear until the second rotor turns. If and only if the second rotor turns, linearity breaks. We can thus simply analyse the output to find this point, yielding the index of the `0` in the first rotor.
+
+This can simply be demonstracted by plotting the encrypted bytes using the `[0xff, ..., 0]` sequence as input:
+
+~~~~~~~~~~~~~{.py}
+import matplotlib.pyplot as plt
+import json
+import base64
+
+with open("examples/bytenigma/backwards.out.json") as f:
+    output = base64.b64decode(json.load(f)["output"])
+for i, (p, x) in enumerate(zip(output, output[1:])):
+    if x != (p - 1)%256:
+        print("linearity breaks at", i)
+
+plt.plot(list(output), "o")
+plt.grid(True)
+plt.savefig("backwards.png")
+~~~~~~~~~~~~~
+
+![Linearity break at index 0x66 indicates that the second rotor has turned](backwards.png)
+
+In the plot, it is clearly evident that the linearity breaks and the script outputs that the linearity breaks at 102.
+
+Indeed validation shows that `rotors[0][102] == 0`.
+
+We have shown that is is possible, using a single chosen plaintext, to recover the position of the `0` in the first rotor.

@@ -111,3 +111,13 @@ In the plot, it is clearly evident that the linearity breaks and the script outp
 Indeed validation shows that `rotors[0][102] == 0`.
 
 We have shown that is is possible, using a single chosen plaintext, to recover the position of the `0` in the first rotor.
+
+## Missing Nonce 
+
+The BYTENIGMA encryption is equivalent to a polyalphabetic encryption, where each position in the cleartext gets assigned an alphabet based on the rotor configuration.
+
+However because no nonce is used, key reuse is fatal. If an attacker has a single pair of known plaintext and corresponding ciphertext, they can deduce not only the mappings for the specific bytes from the plaintext, but also make assumptions about the alphabets. By the same logic used to find the `0` in the first rotor, if we assume the second rotor did not turn, \f$E_i(x)\f$ (encryption of byte \f$x\f$ at index \f$i\f$) is equivalent to \f$E_{i+1}(x-1) + 1 \pmod{256}\f$.
+
+This potentially allows an attacker to recover parts of an unknown ciphertext, given a single known plaintext pair. Thus, key use must be avoided.
+
+Note: In the original enigma, this was somewhat prevented, by encrypting a "message key" at the beginning of each message using the "daily key", and encrypting the rest of the message using the "message key". However, as Rejewski's characteristic method proves, this was not fully effective.

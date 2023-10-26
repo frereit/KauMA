@@ -121,3 +121,27 @@ However because no nonce is used, key reuse is fatal. If an attacker has a singl
 This potentially allows an attacker to recover parts of an unknown ciphertext, given a single known plaintext pair. Thus, key use must be avoided.
 
 Note: In the original enigma, this was somewhat prevented, by encrypting a "message key" at the beginning of each message using the "daily key", and encrypting the rest of the message using the "message key". However, as Rejewski's characteristic method proves, this was not fully effective.
+
+## Side Channel Attack
+
+There is an obvious side-channel attack on this specific implementation of BYTENIGMA. Let's take a look at the implementation of `Bytenigma::turn_rotor`:
+
+~~~~~~~~~~~~~{.cpp}
+void Bytenigma::Bytenigma::turn_rotor(const std::size_t &index) {
+  // Recursively turn the rotor at `index` and all rotors to the right of it as
+  // long as an overflow occurs
+  const std::vector<std::uint8_t> &rotor = m_rotors.at(index);
+  std::size_t old_position = m_rotor_positions.at(index);
+  m_rotor_positions.at(index) = (old_position + 1) % rotor.size();
+
+  // check if we also need to rotate the next rotor by checking
+  // if the top-most element is currently a 0
+  if (rotor.at(old_position) == 0 && (index + 1) < m_rotors.size()) {
+    this->turn_rotor(index + 1);
+  };
+}
+~~~~~~~~~~~~~
+
+Notice the recursive nature of this implementation. If and only if a rotor overflowed and there are more rotors to turn, a recursive call is made. This will incur more executed instructions than if no overflow occurred. We can thus expect that it is feasible to deduce the position of the `0` of all rotors except the last rotor in the chain by counting the number of instruction executed, or indirectly by measuring the execution time when encryption a single byte.
+
+This should be fixed by making the execution time independent of an overflow, e.g. by using branchless programming. A rotor should be turned by `0` if the previous rotor did not overflow, and turned by `1` if the previous rotor overflowed.

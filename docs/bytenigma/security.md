@@ -2,6 +2,19 @@
 
 In this page, various possible attacks and weaknesses both on the BYTENIGMA algorithm itself and my implementation will be documented.
 
+## Key Space
+
+- A single rotor can be configured in \f$256! \approx 2^{1683} \f$ different ways, giving approximately 1638 bit of security per rotor. If \f$n\f$ rotors are used, the key space increases to \f$n \cdot 1638\f$ bit.
+
+Note that for the last rotor in the chain, the key space is halved. Due to the complement, there always exist two rotors which cause the same mapping, since \f$x \mapsto y \wedge \bar{y} \mapsto z\f$ is equivalent to \f$x \mapsto \bar{y} \wedge y \mapsto z\f$. This causes the keyspace to be reduced by a single bit.
+
+- If the specific rotor wirings are considered as domain parameters and there are \f$N\f$ total rotor wirings and the machine is always used with \f$n\f$, then there are simply \f$N \choose n\f$ possible rotor permutations. For a chosen permutation, each rotor can be started in one of 256 positions, giving an additional \f$256^n\f$ possible starting configurations.
+In total, this gives \f$\log_2 \left({N \choose n} \cdot 256^n\right)\f$ bit of security. Assuming the use of 3 rotors (\f$n = 3\f$), we can graph the relationship between \f$N\f$ and \f$\log_2 \left({N \choose n} \cdot 256^n\right)\f$:
+
+![The expected key space when using \f$n=3\f$ and different \f$N\f$](keyspace_n_3.png)
+
+Additionally note that the keyspace is simply limited by the number of plaintext byte encrypted. On average, a rotor at position \f$n\f$ (0-indexed) rotates every \f$2^n\f$ input bytes. If, during the entire encryption of a given plaintext, a rotor does not turn, it does not have to be considered as part of the keyspace. For the ciphertext, an equivalent BYTENIGMA machine can be constructed which consits only of the turned rotors, with the last rotor simply "including" the mapping applied by the rotors which did not move at all. This means that choosing more rotors is not an effective method of increasing the keyspace. For example, encrypting 512 bytes using 3 rotors is on average not less secure than using 30 rotors.
+
 ## Indistinguishability & Bias
 
 There is a trivial bias in the output: Any given input byte \f$x\f$ can never be encrypted to itself. This can be proven as follows:

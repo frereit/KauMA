@@ -8,9 +8,11 @@ TARGET   := kauma
 INCLUDE  := -Iinclude/ -Iexternal/
 SRC      :=                      \
    $(wildcard src/*.cpp)         \
+   $(wildcard src/tcp/*.cpp)	 \
 
 HEADERS	 :=                      \
    $(wildcard include/*.hpp)	 \
+   $(wildcard include/tcp/*.hpp) \
 
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstdint>
 #include <nlohmann/json.hpp>
 #include <vector>
@@ -6,6 +7,7 @@
 #include "cppcodec/base64_rfc4648.hpp"
 #include "glue.hpp"
 #include "noop.hpp"
+#include "padding_oracle/server.hpp"
 
 using json = nlohmann::json;
 
@@ -34,7 +36,19 @@ extern const std::map<std::string, Glue::glue_function> Glue::ACTIONS = {
        json output = {{"output", cppcodec::base64_rfc4648::encode(raw_output)}};
        return output;
      }},
-};
+    {"padding_oracle_server", [](const json &input) {
+       PaddingOracle::block key;
+       std::vector<std::uint8_t> raw_key =
+           cppcodec::base64_rfc4648::decode(input["key"].get<std::string>());
+       if (raw_key.size() != PaddingOracle::BLOCK_SIZE) {
+         throw std::runtime_error("Invalid key size!");
+       }
+       std::copy_n(raw_key.begin(), PaddingOracle::BLOCK_SIZE, key.begin());
+       std::uint16_t port = input["port"].get<std::uint16_t>();
+       PaddingOracle::XORCBCServer server{key, port};
+       server.loop_forever();
+       return json();
+     }}};
 
 /// @brief executes a specific action by parsing the arguments from the JSON and
 /// calling the correct library function

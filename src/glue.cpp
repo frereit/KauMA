@@ -36,7 +36,7 @@ extern const std::map<std::string, Glue::glue_function> Glue::ACTIONS = {
        json output = {{"output", cppcodec::base64_rfc4648::encode(raw_output)}};
        return output;
      }},
-    {"padding_oracle_server", [](const json &input) {
+    {"padding-oracle-server", [](const json &input) {
        PaddingOracle::block key;
        std::vector<std::uint8_t> raw_key =
            cppcodec::base64_rfc4648::decode(input["key"].get<std::string>());

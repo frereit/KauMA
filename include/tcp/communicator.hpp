@@ -25,6 +25,11 @@ public:
     other.m_fd = -1;
   }
 
+  /// @brief create a new Communicator from a hostname and port
+  /// @param hostname the hostname or IP literal to connect to
+  /// @param port the port at which to connect
+  Communicator(const std::string &hostname, const std::uint16_t port);
+
   ~Communicator() {
     if (this->m_fd != -1)
       close(this->m_fd);

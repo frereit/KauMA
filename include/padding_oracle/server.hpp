@@ -12,7 +12,7 @@
  */
 namespace PaddingOracle {
 
-auto constexpr BLOCK_SIZE = 16;
+std::uint8_t constexpr BLOCK_SIZE = 16;
 typedef std::array<std::uint8_t, BLOCK_SIZE> block;
 
 /**

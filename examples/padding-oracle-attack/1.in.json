@@ -1,0 +1,8 @@
+{
+    "action": "padding-oracle-attack",
+    "hostname": "localhost",
+    "port": 18732,
+    "iv": "Na29wpm8q86NriULHKv16A==",
+    "_comment_plaintext": "3q2+78r+r/7erb7vyv6v/g==",
+    "ciphertext": "w6u1d3a7owg6B4bUyO6C/Q=="
+}

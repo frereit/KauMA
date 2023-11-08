@@ -1,0 +1,7 @@
+{
+    "action": "padding-oracle-attack",
+    "hostname": "141.72.5.194",
+    "port": 18732,
+    "iv": "NYMmmAUCNIlq5AWgOfFhqA==",
+    "ciphertext": "lWrizKxzxuZbsU72s6UJcQ=="
+}

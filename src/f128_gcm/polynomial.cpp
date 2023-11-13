@@ -53,6 +53,31 @@ std::vector<std::uint8_t> F128_GCM::Polynomial::to_exponents() {
   return exponents;
 }
 
+F128_GCM::Polynomial &F128_GCM::Polynomial::operator+=(const Polynomial &rhs) {
+  this->m_polynomial ^= rhs.m_polynomial;
+  return *this;
+}
+
+F128_GCM::Polynomial &F128_GCM::Polynomial::operator*=(const Polynomial &rhs) {
+  auto mul = std::bitset<128>(0);
+  std::bitset<128> a = this->m_polynomial;
+  std::bitset<128> b = rhs.m_polynomial;
+  while (a.any() && b.any()) {
+    if (b[0]) {
+      mul ^= a;
+    }
+
+    bool reduce = a[127];
+    a <<= 1;
+    if (reduce) {
+      a ^= F128_GCM::REDUCTION_POLYNOMIAL;
+    }
+    b >>= 1;
+  }
+  this->m_polynomial = mul;
+  return *this;
+}
+
 #ifdef TEST
 #include <cstdint>
 #include <iostream>
@@ -82,5 +107,44 @@ TEST_CASE("polynomial factor conversions") {
       "00000000000000000000000000000000000000000000000000001111"));
   CHECK(actual == expected);
   CHECK(expected.to_exponents() == exponents);
+}
+
+TEST_CASE("polynomial addition") {
+  F128_GCM::Polynomial a = F128_GCM::Polynomial::from_exponents(
+      {0, 1, 2, 3, 10, 11, 12, 13, 125, 126, 127});
+  F128_GCM::Polynomial b =
+      F128_GCM::Polynomial::from_exponents({1, 2, 4, 11, 12, 13, 32, 127});
+  F128_GCM::Polynomial expected =
+      F128_GCM::Polynomial::from_exponents({0, 3, 4, 10, 32, 125, 126});
+
+  CHECK(a + b == expected);
+}
+
+TEST_CASE("polynomial multiplication") {
+  F128_GCM::Polynomial a = F128_GCM::Polynomial(std::bitset<128>(
+      "011001010111010110001110001101011100000111010101011011000010111001110001"
+      "00111100111101010010100010101101001110110101110110111111"));
+  F128_GCM::Polynomial alpha = F128_GCM::Polynomial(std::bitset<128>(
+      "000000000000000000000000000000000000000000000000000000000000000000000000"
+      "00000000000000000000000000000000000000000000000000000010"));
+  F128_GCM::Polynomial a_times_alpha = F128_GCM::Polynomial(std::bitset<128>(
+      "110010101110101100011100011010111000001110101010110110000101110011100010"
+      "01111001111010100101000101011010011101101011101101111110"));
+  F128_GCM::Polynomial a_times_alpha_squared =
+      F128_GCM::Polynomial(std::bitset<128>(
+          "10010101110101100011100011010111000001110101010110110000101110011100"
+          "010011110011110101001010001010110100111011010111011001111011"));
+
+  CHECK(a * alpha == a_times_alpha);
+  CHECK(a * alpha * alpha == a_times_alpha_squared);
+
+  F128_GCM::Polynomial b = F128_GCM::Polynomial(std::bitset<128>(
+      "010010100011001101011011110010011100011111111000101010000011001000110111"
+      "10000110100100111101010111010011111011000001111011110111"));
+  F128_GCM::Polynomial a_times_b = F128_GCM::Polynomial(std::bitset<128>(
+      "111000101000001111011001001011110000110111011010111001010110110111101011"
+      "01111001110001110011111111101101001001111100101101000111"));
+
+  CHECK(a * b == a_times_b);
 }
 #endif

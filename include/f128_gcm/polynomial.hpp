@@ -8,6 +8,10 @@
 // However, it is much easier to always use the GCM specific polynomial for now.
 namespace F128_GCM {
 
+const std::bitset<128> REDUCTION_POLYNOMIAL(
+    "00000000000000000000000000000000000000000000000000000000000000000000000000"
+    "000000000000000000000000000000000000000000000010000111");
+
 class Polynomial {
 public:
   /// @brief construct a new Polynomial over F_(2^128) from a list of factors
@@ -49,6 +53,27 @@ public:
   /// @return the polynomial has a 1 as a factor at every index
   /// specified in this vector.
   std::vector<std::uint8_t> to_exponents();
+
+  Polynomial &operator+=(const Polynomial &rhs);
+  Polynomial &operator*=(const Polynomial &rhs);
+
+  friend inline bool operator==(const Polynomial &lhs, const Polynomial &rhs) {
+    return lhs.m_polynomial == rhs.m_polynomial;
+  }
+
+  friend inline bool operator!=(const Polynomial &lhs, const Polynomial &rhs) {
+    return !(lhs == rhs);
+  }
+
+  friend Polynomial operator+(Polynomial lhs, const Polynomial &rhs) {
+    lhs += rhs;
+    return lhs;
+  }
+
+  friend Polynomial operator*(Polynomial lhs, const Polynomial &rhs) {
+    lhs *= rhs;
+    return lhs;
+  }
 
 private:
   std::bitset<128> m_polynomial;

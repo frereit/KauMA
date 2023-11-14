@@ -8,6 +8,7 @@ TARGET   := kauma
 INCLUDE  := -Iinclude/ -Iexternal/
 SRC      :=                      \
    $(wildcard src/*.cpp)         \
+   $(wildcard src/actions/*.cpp)	\
    $(wildcard src/tcp/*.cpp)	 \
    $(wildcard src/padding_oracle/*.cpp) \
    $(wildcard src/f128_gcm/*.cpp)	\

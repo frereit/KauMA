@@ -10,7 +10,9 @@ const std::map<std::string, Glue::glue_function> ACTIONS = {
     {"noop", Actions::noop},
     {"bytenigma", Actions::bytenigma},
     {"padding-oracle-server", Actions::padding_oracle_server},
-    {"padding-oracle-attack", Actions::padding_oracle_attack}};
+    {"padding-oracle-attack", Actions::padding_oracle_attack},
+    {"gcm-block2poly", Actions::gcm_block2poly},
+    {"gcm-poly2block", Actions::gcm_poly2block}};
 
 nlohmann::json execute_action(const nlohmann::json &input);
 } // namespace Glue

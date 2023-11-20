@@ -4,15 +4,15 @@
 #include <stdexcept>
 #include <vector>
 
-// FIXME: This could instead be a template<std::size_t N> Galois::Polynomial to
-// support arbitrary sized fields with an arbitrary reduction polynomial.
-// However, it is much easier to always use the GCM specific polynomial for now.
-namespace F128_GCM {
+namespace GCM {
 
 const std::bitset<128> REDUCTION_POLYNOMIAL(
     "00000000000000000000000000000000000000000000000000000000000000000000000000"
     "000000000000000000000000000000000000000000000010000111");
 
+// FIXME: This could instead be a template<std::size_t N> Galois::Polynomial to
+// support arbitrary sized fields with an arbitrary reduction polynomial.
+// However, it is much easier to always use the GCM specific polynomial for now.
 class Polynomial {
 public:
   /// @brief construct a new Polynomial over F_(2^128) from a list of factors
@@ -79,4 +79,4 @@ public:
 private:
   std::bitset<128> m_polynomial;
 };
-} // namespace F128_GCM
+} // namespace GCM

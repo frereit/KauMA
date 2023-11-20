@@ -11,13 +11,13 @@ SRC      :=                      \
    $(wildcard src/actions/*.cpp)	\
    $(wildcard src/tcp/*.cpp)	 \
    $(wildcard src/padding_oracle/*.cpp) \
-   $(wildcard src/f128_gcm/*.cpp)	\
+   $(wildcard src/gcm/*.cpp)	\
 
 HEADERS	 :=                      \
    $(wildcard include/*.hpp)	 \
    $(wildcard include/tcp/*.hpp) \
    $(wildcard include/padding_oracle/*.hpp) \
-   $(wildcard include/f128_gcm/*.hpp)	\
+   $(wildcard include/gcm/*.hpp)	\
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 DEPENDENCIES \

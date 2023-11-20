@@ -5,8 +5,8 @@
 
 #include "gcm/polynomial.hpp"
 
-GCM::Polynomial GCM::Polynomial::from_gcm_bytes(
-    const std::vector<std::uint8_t> &gcm_bytes) {
+GCM::Polynomial
+GCM::Polynomial::from_gcm_bytes(const std::vector<std::uint8_t> &gcm_bytes) {
   assert((gcm_bytes.size() == 16) &&
          "Must supply exactly 16 bytes to construct a polynomial!");
 
@@ -33,8 +33,8 @@ std::vector<std::uint8_t> GCM::Polynomial::to_gcm_bytes() {
   return gcm_bytes;
 }
 
-GCM::Polynomial GCM::Polynomial::from_exponents(
-    const std::vector<std::uint8_t> &exponents) {
+GCM::Polynomial
+GCM::Polynomial::from_exponents(const std::vector<std::uint8_t> &exponents) {
   auto factors = std::bitset<128>(0);
   for (const std::uint8_t &exponent : exponents) {
     assert((exponent < factors.size()) && "Exponent must be less than 128");
@@ -130,10 +130,9 @@ TEST_CASE("polynomial multiplication") {
   GCM::Polynomial a_times_alpha = GCM::Polynomial(std::bitset<128>(
       "110010101110101100011100011010111000001110101010110110000101110011100010"
       "01111001111010100101000101011010011101101011101101111110"));
-  GCM::Polynomial a_times_alpha_squared =
-      GCM::Polynomial(std::bitset<128>(
-          "10010101110101100011100011010111000001110101010110110000101110011100"
-          "010011110011110101001010001010110100111011010111011001111011"));
+  GCM::Polynomial a_times_alpha_squared = GCM::Polynomial(std::bitset<128>(
+      "10010101110101100011100011010111000001110101010110110000101110011100"
+      "010011110011110101001010001010110100111011010111011001111011"));
 
   CHECK(a * alpha == a_times_alpha);
   CHECK(a * alpha * alpha == a_times_alpha_squared);

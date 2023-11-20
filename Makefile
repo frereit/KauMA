@@ -1,11 +1,11 @@
 CXX      := -c++
 CXXFLAGS := -pedantic-errors -Wall -Wextra -std=c++20
-LDFLAGS  := -L/usr/lib -lstdc++ -lm
+LDFLAGS  := -L/usr/lib -lstdc++ -lm -lbotan-2
 BUILD    := ./out
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := $(BUILD)/apps
 TARGET   := kauma
-INCLUDE  := -Iinclude/ -Iexternal/
+INCLUDE  := -Iinclude/ -Iexternal/ -I/usr/include/botan-2/
 SRC      :=                      \
    $(wildcard src/*.cpp)         \
    $(wildcard src/actions/*.cpp)	\

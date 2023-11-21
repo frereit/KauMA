@@ -22,6 +22,15 @@ GCM::Encryptor::Encryptor(std::unique_ptr<Botan::BlockCipher> cipher,
          "GCM is only implemented for a 12-byte nonce with a 4-byte counter.");
 }
 
+GCM::EncryptionResult GCM::Encryptor::encrypt_and_authenticate(
+    std::vector<std::uint8_t> plaintext,
+    std::vector<std::uint8_t> associated_data) {
+  std::vector<std::uint8_t> ciphertext = this->encrypt(plaintext);
+  std::vector<std::uint8_t> auth_tag =
+      this->authenticate(ciphertext, associated_data);
+  return {ciphertext, auth_tag};
+}
+
 std::vector<std::uint8_t> GCM::Encryptor::y0() {
   return this->gen_ctr_block(1);
 }

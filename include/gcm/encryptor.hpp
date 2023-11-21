@@ -5,10 +5,20 @@
 
 namespace GCM {
 
+/// @brief A ciphertext and associated auth tag
+struct EncryptionResult {
+  const std::vector<std::uint8_t> ciphertext;
+  const std::vector<std::uint8_t> auth_tag;
+};
+
 class Encryptor {
 public:
   Encryptor(const std::unique_ptr<Botan::BlockCipher> cipher,
             const std::vector<std::uint8_t> &nonce);
+
+  EncryptionResult
+  encrypt_and_authenticate(std::vector<std::uint8_t> plaintext,
+                           std::vector<std::uint8_t> associated_data);
 
   /// @brief generate the block used to generate the auth tag mask
   /// @return the block \f$Y_0 = \mathrm{Nonce} || \mathrm{Ctr 1}\f$

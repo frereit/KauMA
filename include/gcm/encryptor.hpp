@@ -30,6 +30,9 @@ private:
 
   std::vector<std::uint8_t> gen_ctr_block(std::uint32_t ctr);
   std::vector<std::uint8_t> encrypt(std::vector<std::uint8_t> plaintext);
+  std::vector<std::uint8_t>
+  authenticate(std::vector<std::uint8_t> ciphertext,
+               std::vector<std::uint8_t> associated_data);
   std::vector<std::uint8_t> ghash(std::vector<std::uint8_t> ciphertext,
                                   std::vector<std::uint8_t> associated_data,
                                   std::vector<std::uint8_t> key);

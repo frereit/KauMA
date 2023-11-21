@@ -55,6 +55,21 @@ GCM::Encryptor::encrypt(std::vector<std::uint8_t> plaintext) {
   }
   return ciphertext;
 }
+
+std::vector<std::uint8_t>
+GCM::Encryptor::authenticate(std::vector<std::uint8_t> ciphertext,
+                             std::vector<std::uint8_t> associated_data) {
+  std::vector<std::uint8_t> auth_tag =
+      this->ghash(ciphertext, associated_data, this->h());
+
+  std::vector<std::uint8_t> auth_tag_mask = this->y0();
+  this->m_cipher->encrypt(auth_tag_mask);
+
+  std::transform(auth_tag.begin(), auth_tag.end(), auth_tag_mask.begin(),
+                 auth_tag.begin(), std::bit_xor<uint8_t>());
+  return auth_tag;
+}
+
 std::vector<std::uint8_t>
 GCM::Encryptor::ghash(std::vector<std::uint8_t> ciphertext,
                       std::vector<std::uint8_t> associated_data,

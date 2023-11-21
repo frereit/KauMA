@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <bit>
 #include <botan/block_cipher.h>
 #include <botan/hex.h>
 #include <functional>
@@ -10,10 +11,8 @@
 #include "gcm/encryptor.hpp"
 
 std::vector<std::uint8_t> GCM::Encryptor::gen_ctr_block(std::uint32_t ctr) {
-  ctr = ByteManipulation::swap_for_endianness(ctr, std::endian::big);
   std::vector<std::uint8_t> block = m_nonce;
-  block.insert(block.end(), reinterpret_cast<std::uint8_t *>(&ctr),
-               reinterpret_cast<std::uint8_t *>(&ctr) + sizeof(ctr));
+  ByteManipulation::append_as_bytes(ctr, std::endian::big, block);
   return block;
 }
 

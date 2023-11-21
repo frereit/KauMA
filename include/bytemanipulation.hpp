@@ -1,8 +1,10 @@
 #pragma once
+#include <algorithm>
 #include <bit>
 #include <concepts>
 #include <ranges>
-#include <algorithm>
+#include <vector>
+#include <cstdint>
 
 namespace ByteManipulation {
 
@@ -30,5 +32,18 @@ constexpr T swap_for_endianness(T value, std::endian endianness) noexcept {
     value = ByteManipulation::byteswap(value);
   }
   return value;
+}
+
+/// @brief append a value to a vector of bytes
+/// @tparam T the size of the value to append (e.g. std::uint64_t)
+/// @param value the value to append
+/// @param endianness the endianness to use
+/// @param out the vector to which to append the data
+template <std::integral T>
+inline void append_as_bytes(T value, std::endian endianness,
+                  std::vector<std::uint8_t> &out) {
+  value = swap_for_endianness(value, endianness);
+  out.insert(out.end(), reinterpret_cast<std::uint8_t *>(&value),
+                   reinterpret_cast<std::uint8_t *>(&value) + sizeof(value));
 }
 } // namespace ByteManipulation

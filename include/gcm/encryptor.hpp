@@ -10,6 +10,19 @@ public:
   Encryptor(const std::unique_ptr<Botan::BlockCipher> cipher,
             const std::vector<std::uint8_t> &nonce);
 
+  /// @brief generate the block used to generate the auth tag mask
+  /// @return the block \f$Y_0 = \mathrm{Nonce} || \mathrm{Ctr 1}\f$
+  /// @note This is only exposed because it is a required output for the
+  /// assignment. Exposing internal primitives to the consumer is usually a bad
+  /// idea because it leads allows for incorrect usage of the Encryptor class.
+  std::vector<std::uint8_t> y0();
+
+  /// @brief generate the auth key
+  /// @return the auth key block \f$H = E(0)\f$
+  /// @note This is only exposed because it is a required output for the
+  /// assignment. Exposing internal primitives to the consumer is usually a bad
+  /// idea because it leads allows for incorrect usage of the Encryptor class.
+  std::vector<std::uint8_t> h();
 
 #ifndef TEST
 private:

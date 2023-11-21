@@ -1,0 +1,7 @@
+{
+  "action": "gcm-encrypt",
+  "key": "AAAAAAAAAAAAAAAAAAAAAA==",
+  "nonce": "AAAAAAAAAAAAAAAA",
+  "associated_data": "",
+  "plaintext": ""
+}

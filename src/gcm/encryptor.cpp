@@ -13,12 +13,17 @@
 
 GCM::Encryptor::Encryptor(std::unique_ptr<Botan::BlockCipher> cipher,
                           const std::vector<std::uint8_t> &nonce)
-    : m_cipher(std::move(cipher)), m_nonce(nonce) {
+    : m_cipher(std::move(cipher)) {
   // SAFETY: This requirement is used in GCM::Encryptor::ghash.
   assert(m_cipher->block_size() == 16 &&
          "GCM is only implemented for ciphers with 16-byte blocks.");
-  assert(m_nonce.size() == 12 &&
-         "GCM is only implemented for a 12-byte nonce with a 4-byte counter.");
+  if (nonce.size() == 12) {
+    m_y0 = nonce;
+    m_y0.resize(this->m_cipher->block_size(), 0);
+    m_y0.back() = 1;
+  } else {
+    m_y0 = this->ghash(nonce, {}, this->h());
+  }
 }
 
 GCM::EncryptionResult GCM::Encryptor::encrypt_and_authenticate(
@@ -30,9 +35,7 @@ GCM::EncryptionResult GCM::Encryptor::encrypt_and_authenticate(
   return {ciphertext, auth_tag};
 }
 
-std::vector<std::uint8_t> GCM::Encryptor::y0() {
-  return this->gen_ctr_block(1);
-}
+std::vector<std::uint8_t> GCM::Encryptor::y0() { return this->m_y0; }
 
 std::vector<std::uint8_t> GCM::Encryptor::h() {
   std::vector<std::uint8_t> auth_key(this->m_cipher->block_size());
@@ -40,20 +43,24 @@ std::vector<std::uint8_t> GCM::Encryptor::h() {
   return auth_key;
 }
 
-std::vector<std::uint8_t> GCM::Encryptor::gen_ctr_block(std::uint32_t ctr) {
-  std::vector<std::uint8_t> block = m_nonce;
-  ByteManipulation::append_as_bytes(ctr, std::endian::big, block);
+std::vector<std::uint8_t> GCM::Encryptor::y_block(std::uint32_t y) {
+  std::vector<std::uint8_t> block(m_y0.begin(), m_y0.begin() + 12);
+  std::vector<std::uint8_t> val_bytes(m_y0.begin() + 12, m_y0.end());
+  std::uint32_t val =
+      ByteManipulation::from_bytes<std::uint32_t>(val_bytes, std::endian::big);
+  val += y;
+  ByteManipulation::append_as_bytes(val, std::endian::big, block);
   return block;
 }
 
 std::vector<std::uint8_t>
 GCM::Encryptor::encrypt(std::vector<std::uint8_t> plaintext) {
   std::vector<std::uint8_t> ciphertext, keystream;
-  std::uint32_t ctr = 2;
+  std::uint32_t y = 1;
   for (const std::uint8_t &pt : plaintext) {
     if (keystream.size() == 0) {
       // No bytes left in the keystream so we need to encrypt a new block
-      keystream = this->gen_ctr_block(ctr++);
+      keystream = this->y_block(y++);
       this->m_cipher->encrypt(keystream);
     }
     ciphertext.push_back(pt ^ keystream.at(0));
@@ -115,22 +122,32 @@ GCM::Encryptor::ghash(std::vector<std::uint8_t> ciphertext,
 #include <botan/hex.h>
 #include <limits>
 
-TEST_CASE("test counter mode block generator") {
+TEST_CASE("test counter mode block generator with 12 byte nonce") {
   std::vector<std::uint8_t> key(16);
   auto aes = Botan::BlockCipher::create_or_throw("AES-128");
   aes->set_key(key);
   std::vector<std::uint8_t> nonce =
       Botan::hex_decode("aa1d5a0aa1ea09f6ff91e534");
   GCM::Encryptor e = GCM::Encryptor(std::move(aes), nonce);
-  CHECK(e.gen_ctr_block(0) ==
-        Botan::hex_decode("aa1d5a0aa1ea09f6ff91e53400000000"));
-  CHECK(e.gen_ctr_block(1) ==
-        Botan::hex_decode("aa1d5a0aa1ea09f6ff91e53400000001"));
-  CHECK(e.gen_ctr_block(0xc479) ==
+  CHECK(e.y_block(0) == Botan::hex_decode("aa1d5a0aa1ea09f6ff91e53400000000"));
+  CHECK(e.y_block(1) == Botan::hex_decode("aa1d5a0aa1ea09f6ff91e53400000001"));
+  CHECK(e.y_block(0xc479) ==
         Botan::hex_decode("aa1d5a0aa1ea09f6ff91e5340000c479"));
-  CHECK(e.gen_ctr_block(0x2001d767) ==
+  CHECK(e.y_block(0x2001d767) ==
         Botan::hex_decode("aa1d5a0aa1ea09f6ff91e5342001d767"));
-  CHECK(e.gen_ctr_block(std::numeric_limits<std::uint32_t>::max()) ==
+  CHECK(e.y_block(std::numeric_limits<std::uint32_t>::max()) ==
         Botan::hex_decode("aa1d5a0aa1ea09f6ff91e534ffffffff"));
+}
+
+TEST_CASE("test counter mode block generator with 8 byte nonce") {
+  std::vector<std::uint8_t> key(16);
+  auto aes = Botan::BlockCipher::create_or_throw("AES-128");
+  aes->set_key(key);
+  std::vector<std::uint8_t> nonce = Botan::hex_decode("cafebabefacedbad");
+  GCM::Encryptor e = GCM::Encryptor(std::move(aes), nonce);
+  CHECK(e.y_block(1) == Botan::hex_decode("c43a83c4c4badec4354ca984db252f7d"));
+  CHECK(e.y_block(2) == Botan::hex_decode("c43a83c4c4badec4354ca984db252f7e"));
+  CHECK(e.y_block(4) == Botan::hex_decode("c43a83c4c4badec4354ca984db252f80"));
+  CHECK(e.y_block(7) == Botan::hex_decode("08c873f1c8cec3effc209a07468caab1"));
 }
 #endif

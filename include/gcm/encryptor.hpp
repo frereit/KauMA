@@ -38,7 +38,7 @@ public:
 private:
 #endif
 
-  std::vector<std::uint8_t> gen_ctr_block(std::uint32_t ctr);
+  std::vector<std::uint8_t> y_block(std::uint32_t ctr);
   std::vector<std::uint8_t> encrypt(std::vector<std::uint8_t> plaintext);
   std::vector<std::uint8_t>
   authenticate(std::vector<std::uint8_t> ciphertext,
@@ -48,7 +48,7 @@ private:
                                   std::vector<std::uint8_t> key);
 
   const std::unique_ptr<Botan::BlockCipher> m_cipher;
-  const std::vector<std::uint8_t> &m_nonce;
+  std::vector<std::uint8_t> m_y0;
 };
 
 } // namespace GCM

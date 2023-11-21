@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <bit>
+#include <cassert>
 #include <concepts>
 #include <cstdint>
 #include <ranges>
@@ -45,5 +46,19 @@ inline void append_as_bytes(T value, std::endian endianness,
   value = swap_for_endianness(value, endianness);
   out.insert(out.end(), reinterpret_cast<std::uint8_t *>(&value),
              reinterpret_cast<std::uint8_t *>(&value) + sizeof(value));
+}
+
+/// @brief construct a value from a sequence of bytes
+/// @tparam T the value type to create
+/// @param in the sequence of bytes
+/// @param endianness the endianness of the byte sequence
+/// @return the constructed value
+template <std::integral T>
+inline T from_bytes(std::vector<std::uint8_t> in, std::endian endianness) {
+  T val = 0;
+  assert(in.size() == sizeof(T) &&
+         "Attempted conversion with invalid byte length");
+  std::copy_n(in.begin(), sizeof(T), reinterpret_cast<std::uint8_t *>(&val));
+  return swap_for_endianness(val, endianness);
 }
 } // namespace ByteManipulation

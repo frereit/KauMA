@@ -91,7 +91,7 @@ GCM::Encryptor::ghash(std::vector<std::uint8_t> ciphertext,
       } else {
         end = v.begin() + i + this->m_cipher->block_size();
       }
-  
+
       std::vector<std::uint8_t> block(v.begin() + i, end);
       block.resize(this->m_cipher->block_size(), 0);
       auth_tag += GCM::Polynomial::from_gcm_bytes(block);

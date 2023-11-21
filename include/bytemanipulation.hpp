@@ -2,9 +2,9 @@
 #include <algorithm>
 #include <bit>
 #include <concepts>
+#include <cstdint>
 #include <ranges>
 #include <vector>
-#include <cstdint>
 
 namespace ByteManipulation {
 
@@ -41,9 +41,9 @@ constexpr T swap_for_endianness(T value, std::endian endianness) noexcept {
 /// @param out the vector to which to append the data
 template <std::integral T>
 inline void append_as_bytes(T value, std::endian endianness,
-                  std::vector<std::uint8_t> &out) {
+                            std::vector<std::uint8_t> &out) {
   value = swap_for_endianness(value, endianness);
   out.insert(out.end(), reinterpret_cast<std::uint8_t *>(&value),
-                   reinterpret_cast<std::uint8_t *>(&value) + sizeof(value));
+             reinterpret_cast<std::uint8_t *>(&value) + sizeof(value));
 }
 } // namespace ByteManipulation

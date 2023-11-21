@@ -129,25 +129,25 @@ TEST_CASE("test counter mode block generator with 12 byte nonce") {
   std::vector<std::uint8_t> nonce =
       Botan::hex_decode("aa1d5a0aa1ea09f6ff91e534");
   GCM::Encryptor e = GCM::Encryptor(std::move(aes), nonce);
-  CHECK(e.y_block(0) == Botan::hex_decode("aa1d5a0aa1ea09f6ff91e53400000000"));
-  CHECK(e.y_block(1) == Botan::hex_decode("aa1d5a0aa1ea09f6ff91e53400000001"));
-  CHECK(e.y_block(0xc479) ==
-        Botan::hex_decode("aa1d5a0aa1ea09f6ff91e5340000c479"));
-  CHECK(e.y_block(0x2001d767) ==
-        Botan::hex_decode("aa1d5a0aa1ea09f6ff91e5342001d767"));
-  CHECK(e.y_block(std::numeric_limits<std::uint32_t>::max()) ==
-        Botan::hex_decode("aa1d5a0aa1ea09f6ff91e534ffffffff"));
+  CHECK(Botan::hex_encode(e.y_block(0)) == "AA1D5A0AA1EA09F6FF91E53400000001");
+  CHECK(Botan::hex_encode(e.y_block(0xc478)) ==
+        "AA1D5A0AA1EA09F6FF91E5340000C479");
+  CHECK(Botan::hex_encode(e.y_block(0x2001d766)) ==
+        "AA1D5A0AA1EA09F6FF91E5342001D767");
+  CHECK(Botan::hex_encode(e.y_block(std::numeric_limits<std::uint32_t>::max() -
+                                    1)) == "AA1D5A0AA1EA09F6FF91E534FFFFFFFF");
 }
 
 TEST_CASE("test counter mode block generator with 8 byte nonce") {
-  std::vector<std::uint8_t> key(16);
+  std::vector<std::uint8_t> key =
+      Botan::hex_decode("feffe9928665731c6d6a8f9467308308");
+  std::vector<std::uint8_t> nonce = Botan::hex_decode("cafebabefacedbad");
   auto aes = Botan::BlockCipher::create_or_throw("AES-128");
   aes->set_key(key);
-  std::vector<std::uint8_t> nonce = Botan::hex_decode("cafebabefacedbad");
   GCM::Encryptor e = GCM::Encryptor(std::move(aes), nonce);
-  CHECK(e.y_block(1) == Botan::hex_decode("c43a83c4c4badec4354ca984db252f7d"));
-  CHECK(e.y_block(2) == Botan::hex_decode("c43a83c4c4badec4354ca984db252f7e"));
-  CHECK(e.y_block(4) == Botan::hex_decode("c43a83c4c4badec4354ca984db252f80"));
-  CHECK(e.y_block(7) == Botan::hex_decode("08c873f1c8cec3effc209a07468caab1"));
+  CHECK(Botan::hex_encode(e.y_block(0)) == "C43A83C4C4BADEC4354CA984DB252F7D");
+  CHECK(Botan::hex_encode(e.y_block(1)) == "C43A83C4C4BADEC4354CA984DB252F7E");
+  CHECK(Botan::hex_encode(e.y_block(3)) == "C43A83C4C4BADEC4354CA984DB252F80");
+  CHECK(Botan::hex_encode(e.y_block(4)) == "C43A83C4C4BADEC4354CA984DB252F81");
 }
 #endif

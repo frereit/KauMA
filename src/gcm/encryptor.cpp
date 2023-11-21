@@ -6,13 +6,11 @@
 #include <iterator>
 #include <stdexcept>
 
+#include "bytemanipulation.hpp"
 #include "gcm/encryptor.hpp"
-#include "polyfill.hpp"
 
 std::vector<std::uint8_t> GCM::Encryptor::gen_ctr_block(std::uint32_t ctr) {
-  if (std::endian::native != std::endian::big) {
-    ctr = byteswap(ctr);
-  }
+  ctr = ByteManipulation::swap_for_endianness(ctr, std::endian::big);
   std::vector<std::uint8_t> block = m_nonce;
   block.insert(block.end(), reinterpret_cast<std::uint8_t *>(&ctr),
                reinterpret_cast<std::uint8_t *>(&ctr) + sizeof(ctr));
@@ -26,7 +24,8 @@ std::vector<std::uint8_t> GCM::Encryptor::gen_ctr_block(std::uint32_t ctr) {
 
 TEST_CASE("test counter mode block generator") {
   std::vector<std::uint8_t> key(16);
-  std::vector<std::uint8_t> nonce = Botan::hex_decode("aa1d5a0aa1ea09f6ff91e534");
+  std::vector<std::uint8_t> nonce =
+      Botan::hex_decode("aa1d5a0aa1ea09f6ff91e534");
   GCM::Encryptor e = GCM::Encryptor(key, nonce);
   CHECK(e.gen_ctr_block(0) ==
         Botan::hex_decode("aa1d5a0aa1ea09f6ff91e53400000000"));

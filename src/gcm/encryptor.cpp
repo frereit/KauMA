@@ -93,9 +93,11 @@ GCM::Encryptor::ghash(std::vector<std::uint8_t> ciphertext,
 
 TEST_CASE("test counter mode block generator") {
   std::vector<std::uint8_t> key(16);
+  auto aes = Botan::BlockCipher::create_or_throw("AES-128");
+  aes->set_key(key);
   std::vector<std::uint8_t> nonce =
       Botan::hex_decode("aa1d5a0aa1ea09f6ff91e534");
-  GCM::Encryptor e = GCM::Encryptor(key, nonce);
+  GCM::Encryptor e = GCM::Encryptor(std::move(aes), nonce);
   CHECK(e.gen_ctr_block(0) ==
         Botan::hex_decode("aa1d5a0aa1ea09f6ff91e53400000000"));
   CHECK(e.gen_ctr_block(1) ==

@@ -1,5 +1,6 @@
 #pragma once
 #include <bitset>
+#include <cassert>
 #include <set>
 #include <stdexcept>
 #include <vector>
@@ -55,8 +56,34 @@ public:
   /// specified in this vector.
   std::vector<std::uint8_t> to_exponents();
 
+  template <std::size_t l> Polynomial pow(std::bitset<l> exponents) const {
+    if (exponents.size() == 0) {
+      return Polynomial(1);
+    }
+
+    assert(exponents.test(exponents.size() - 1) &&
+           "Exponent must be binary number with no leading zeros");
+    Polynomial out = *this;
+    for (const std::size_t &i :
+         std::views::iota(0u, exponents.size() - 1) | std::views::reverse) {
+      out *= out;
+      if (exponents.test(i)) {
+        out *= *this;
+      }
+    }
+    return out;
+  }
+
+  Polynomial modular_inverse() const {
+    return this->pow(std::bitset<128>(
+        "1111111111111111111111111111111111111111111111111111111111111111111111"
+        "11"
+        "11111111111111111111111111111111111111111111111111111110"));
+  }
+
   Polynomial &operator+=(const Polynomial &rhs);
   Polynomial &operator*=(const Polynomial &rhs);
+  Polynomial &operator/=(const Polynomial &rhs);
 
   friend inline bool operator==(const Polynomial &lhs, const Polynomial &rhs) {
     return lhs.m_polynomial == rhs.m_polynomial;
@@ -73,6 +100,11 @@ public:
 
   friend Polynomial operator*(Polynomial lhs, const Polynomial &rhs) {
     lhs *= rhs;
+    return lhs;
+  }
+
+  friend Polynomial operator/(Polynomial lhs, const Polynomial &rhs) {
+    lhs /= rhs;
     return lhs;
   }
 

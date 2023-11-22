@@ -78,6 +78,11 @@ GCM::Polynomial &GCM::Polynomial::operator*=(const Polynomial &rhs) {
   return *this;
 }
 
+GCM::Polynomial &GCM::Polynomial::operator/=(const Polynomial &rhs) {
+  *this *= rhs.modular_inverse();
+  return *this;
+}
+
 #ifdef TEST
 #include <cstdint>
 #include <iostream>
@@ -145,5 +150,28 @@ TEST_CASE("polynomial multiplication") {
       "01111001110001110011111111101101001001111100101101000111"));
 
   CHECK(a * b == a_times_b);
+}
+
+TEST_CASE("polynomial inverse") {
+  GCM::Polynomial a = GCM::Polynomial(std::bitset<128>(
+      "011001010111010110001110001101011100000111010101011011000010111001110001"
+      "00111100111101010010100010101101001110110101110110111111"));
+  GCM::Polynomial inv = GCM::Polynomial(std::bitset<128>(
+      "001111101011111001011101100111100100011110100011000001110100101011110100"
+      "11101010100011010111110100100000111110010101001101110100"));
+  CHECK(a.modular_inverse() == inv);
+}
+
+TEST_CASE("polynomial division") {
+  GCM::Polynomial a = GCM::Polynomial(std::bitset<128>(
+      "011001010111010110001110001101011100000111010101011011000010111001110001"
+      "00111100111101010010100010101101001110110101110110111111"));
+  GCM::Polynomial b = GCM::Polynomial(std::bitset<128>(
+      "010010100011001101011011110010011100011111111000101010000011001000110111"
+      "10000110100100111101010111010011111011000001111011110111"));
+  GCM::Polynomial a_div_b = GCM::Polynomial(std::bitset<128>(
+      "010000011001001110100010111000100001001010001011010101110000111011111101"
+      "01101110111111011001111111001011101101011101111101101110"));
+  CHECK(a / b == a_div_b);
 }
 #endif

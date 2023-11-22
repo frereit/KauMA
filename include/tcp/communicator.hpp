@@ -7,7 +7,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "polyfill.hpp"
+#include "bytemanipulation.hpp"
 
 namespace TCP {
 
@@ -57,10 +57,7 @@ public:
         throw std::runtime_error("Failed to read from socket");
       }
     }
-    if (endianness != std::endian::native) {
-      result = byteswap(result);
-    }
-    return result;
+    return ByteManipulation::swap_for_endianness(result, endianness);
   }
 
   /// @brief write an integer to the file descriptor
@@ -69,9 +66,7 @@ public:
   /// @param endianness the endianness to use when writing the value
   /// @throws std::runtime_error if writing failed
   template <std::integral T> void write_num(T value, std::endian endianness) {
-    if (endianness != std::endian::native) {
-      value = byteswap(value);
-    }
+    value = ByteManipulation::swap_for_endianness(value, endianness);
     std::size_t total = 0;
     while (total < sizeof(T)) {
       std::size_t bytes_written =

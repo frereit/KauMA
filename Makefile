@@ -1,20 +1,23 @@
 CXX      := -c++
 CXXFLAGS := -pedantic-errors -Wall -Wextra -std=c++20
-LDFLAGS  := -L/usr/lib -lstdc++ -lm
+LDFLAGS  := -L/usr/lib -lstdc++ -lm -lbotan-2
 BUILD    := ./out
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := $(BUILD)/apps
 TARGET   := kauma
-INCLUDE  := -Iinclude/ -Iexternal/
+INCLUDE  := -Iinclude/ -Iexternal/ -I/usr/include/botan-2/
 SRC      :=                      \
    $(wildcard src/*.cpp)         \
+   $(wildcard src/actions/*.cpp)	\
    $(wildcard src/tcp/*.cpp)	 \
    $(wildcard src/padding_oracle/*.cpp) \
+   $(wildcard src/gcm/*.cpp)	\
 
 HEADERS	 :=                      \
    $(wildcard include/*.hpp)	 \
    $(wildcard include/tcp/*.hpp) \
    $(wildcard include/padding_oracle/*.hpp) \
+   $(wildcard include/gcm/*.hpp)	\
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 DEPENDENCIES \

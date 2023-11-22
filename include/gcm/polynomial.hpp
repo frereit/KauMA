@@ -98,6 +98,16 @@ public:
     return lhs;
   }
 
+  friend Polynomial operator-(Polynomial lhs, const Polynomial &rhs) {
+    lhs += rhs;
+    return lhs;
+  }
+
+  Polynomial &operator-=(const Polynomial &rhs) {
+    *this += rhs;
+    return *this;
+  }
+
   friend Polynomial operator*(Polynomial lhs, const Polynomial &rhs) {
     lhs *= rhs;
     return lhs;

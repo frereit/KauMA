@@ -46,13 +46,13 @@ std::tuple<GCM::CantorZassenhaus::Polynomial, GCM::CantorZassenhaus::Polynomial>
 GCM::CantorZassenhaus::Polynomial::divmod(
     GCM::CantorZassenhaus::Polynomial divisor) const {
   if (this->degree() < divisor.degree()) {
-    return {GCM::CantorZassenhaus::Polynomial({}), divisor};
+    return {GCM::CantorZassenhaus::Polynomial({}), *this};
   }
 
   std::size_t out_degree = this->degree() - divisor.degree();
   GCM::CantorZassenhaus::Polynomial q({out_degree + 1, GCM::Polynomial(0)}),
       r = *this;
-  while (r.degree() >= divisor.degree()) {
+  while (r.degree() >= divisor.degree() && !r.empty()) {
     std::size_t degree = r.degree() - divisor.degree();
     q.coefficient(degree) =
         r.coefficient(r.degree()) / divisor.coefficient(divisor.degree());
@@ -60,6 +60,7 @@ GCM::CantorZassenhaus::Polynomial::divmod(
     factor <<= degree;
     r -= factor * divisor;
   }
+  assert(q * divisor + r == *this);
   return {q, r};
 }
 

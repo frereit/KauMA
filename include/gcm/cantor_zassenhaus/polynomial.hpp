@@ -34,6 +34,8 @@ public:
     return this->m_coeffs.at(index);
   }
 
+  bool empty() const { return this->m_coeffs.size() == 0; }
+
   friend Polynomial operator+(Polynomial lhs, const Polynomial &rhs) {
     lhs += rhs;
     return lhs;

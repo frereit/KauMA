@@ -64,6 +64,9 @@ public:
     return true;
   }
 
+  /// @brief calling this function ensures that the highest order coefficient is 1.
+  void ensure_monic();
+
   Polynomial &operator<<=(std::size_t amount) {
     for (std::size_t i = 0; i < amount; ++i) {
       this->m_coeffs.insert(this->m_coeffs.begin(), GCM::Polynomial(0));

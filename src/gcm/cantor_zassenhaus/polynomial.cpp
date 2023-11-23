@@ -64,6 +64,16 @@ GCM::CantorZassenhaus::Polynomial::divmod(
   return {q, r};
 }
 
+void GCM::CantorZassenhaus::Polynomial::ensure_monic() {
+  while (this->m_coeffs.size() > 0 &&
+         this->m_coeffs.back() == GCM::Polynomial(0)) {
+    this->m_coeffs.pop_back();
+  }
+  for (std::size_t i = 0; i < this->m_coeffs.size(); ++i) {
+    this->m_coeffs.at(i) /= this->m_coeffs.back();
+  }
+}
+
 GCM::CantorZassenhaus::Polynomial
 GCM::CantorZassenhaus::Polynomial::random(std::size_t degree) {
   std::vector<GCM::Polynomial> rand;

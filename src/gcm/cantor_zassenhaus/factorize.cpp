@@ -74,3 +74,53 @@ GCM::CantorZassenhaus::gcd(GCM::CantorZassenhaus::Polynomial a,
   }
   return a;
 }
+
+#ifdef TEST
+#include <botan/hex.h>
+
+#include "doctest.h"
+
+GCM::Polynomial from_hex(std::string hex) {
+  return GCM::Polynomial::from_gcm_bytes(Botan::hex_decode(hex));
+}
+
+TEST_CASE("test multiplication and divmod") {
+  GCM::CantorZassenhaus::Polynomial f(
+      {from_hex("7A9C3400001A584BB29B0A03B7971984"),
+       from_hex("1B81C000000000A9D95C170026D05960"),
+       from_hex("F43800000000000000C45E91CFDC121E"),
+       from_hex("000000000000000000000000DE6DF8F8"),
+       from_hex("80000000000000000000000000000000")});
+  GCM::CantorZassenhaus::Polynomial a(
+      {from_hex("00000000000000000000000000C0FFEE"),
+       from_hex("80000000000000000000000000000000")});
+  GCM::CantorZassenhaus::Polynomial b(
+      {from_hex("05DF80000000000019464EA44524EAF9"),
+       from_hex("E8180000000000000000BF66D09CE402"),
+       from_hex("000000000000000000000000DEAD0716"),
+       from_hex("80000000000000000000000000000000")});
+  CHECK(a * b == f);
+
+  auto [quotient, mod] = f.divmod(a);
+  CHECK(quotient == b);
+  CHECK(mod.empty());
+}
+
+TEST_CASE("test cantor zassenhaus") {
+  GCM::CantorZassenhaus::Polynomial f(
+      {from_hex("7A9C3400001A584BB29B0A03B7971984"),
+       from_hex("1B81C000000000A9D95C170026D05960"),
+       from_hex("F43800000000000000C45E91CFDC121E"),
+       from_hex("000000000000000000000000DE6DF8F8"),
+       from_hex("80000000000000000000000000000000")});
+
+  std::vector<GCM::Polynomial> expected = {
+      from_hex("000000000000000000000000DEADBEEF"),
+      from_hex("0000000000000000000000000000ABCD"),
+      from_hex("00000000000000000000000000001234"),
+      from_hex("00000000000000000000000000C0FFEE")};
+
+  std::vector<GCM::Polynomial> actual = GCM::CantorZassenhaus::zeros(f);
+  CHECK(expected == actual);
+}
+#endif

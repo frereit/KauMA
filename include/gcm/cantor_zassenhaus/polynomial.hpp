@@ -75,6 +75,11 @@ public:
   }
 
   std::tuple<Polynomial, Polynomial> divmod(Polynomial divisor) const;
+  
+  /// @brief generate a Cantor Zassenhaus polynomial with random coefficient
+  /// @param degree the degree of the resulting polynomial
+  /// @return a random polynomial
+  static Polynomial random(std::size_t degree);
 
 private:
   std::vector<GCM::Polynomial> m_coeffs;

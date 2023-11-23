@@ -67,6 +67,27 @@ public:
   /// @brief calling this function ensures that the highest order coefficient is 1.
   void ensure_monic();
 
+  template <std::size_t l>
+  Polynomial pow(std::bitset<l> exponents, Polynomial mod) const {
+    if (exponents.size() == 0) {
+      return Polynomial({GCM::Polynomial(1)});
+    }
+
+    assert(exponents.test(exponents.size() - 1) &&
+           "Exponent must be binary number with no leading zeros");
+    Polynomial out = *this;
+    for (const std::size_t &i :
+         std::views::iota(0u, exponents.size() - 1) | std::views::reverse) {
+      out *= out;
+      if (exponents.test(i)) {
+        out *= *this;
+      }
+      auto [_quotient, remainder] = out.divmod(mod);
+      out = remainder;
+    }
+    return out;
+  }
+
   Polynomial &operator<<=(std::size_t amount) {
     for (std::size_t i = 0; i < amount; ++i) {
       this->m_coeffs.insert(this->m_coeffs.begin(), GCM::Polynomial(0));

@@ -64,7 +64,8 @@ public:
     return true;
   }
 
-  /// @brief calling this function ensures that the highest order coefficient is 1.
+  /// @brief calling this function ensures that the highest order coefficient
+  /// is 1.
   void ensure_monic();
 
   template <std::size_t l>
@@ -101,7 +102,7 @@ public:
   }
 
   std::tuple<Polynomial, Polynomial> divmod(Polynomial divisor) const;
-  
+
   /// @brief generate a Cantor Zassenhaus polynomial with random coefficient
   /// @param degree the degree of the resulting polynomial
   /// @return a random polynomial

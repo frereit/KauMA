@@ -1,6 +1,7 @@
 #include <bitset>
 #include <cassert>
 #include <cstdint>
+#include <cstdlib>
 #include <ranges>
 
 #include "gcm/polynomial.hpp"
@@ -81,6 +82,19 @@ GCM::Polynomial &GCM::Polynomial::operator*=(const Polynomial &rhs) {
 GCM::Polynomial &GCM::Polynomial::operator/=(const Polynomial &rhs) {
   *this *= rhs.modular_inverse();
   return *this;
+}
+
+GCM::Polynomial GCM::Polynomial::random() {
+  std::bitset<128> coefficients(0);
+  for (std::size_t i = 0; i < coefficients.size(); ++i) {
+    // If rand() is used before any calls to std::srand(), rand() behaves as if
+    // it was seeded with std::srand(1).
+    // This is good for reproducibility, so intentionally do not set a seed.
+    if (std::rand() < (RAND_MAX / 2)) {
+      coefficients.set(i);
+    }
+  }
+  return GCM::Polynomial(coefficients);
 }
 
 #ifdef TEST

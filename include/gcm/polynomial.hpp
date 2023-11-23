@@ -81,6 +81,11 @@ public:
         "11111111111111111111111111111111111111111111111111111110"));
   }
 
+  /// @brief generate a random polynomial in GF_(2^128)
+  /// @return a polynomial with each exponent appearing with roughly 50%
+  /// probability.
+  static Polynomial random();
+
   Polynomial &operator+=(const Polynomial &rhs);
   Polynomial &operator*=(const Polynomial &rhs);
   Polynomial &operator/=(const Polynomial &rhs);

@@ -5,33 +5,29 @@
 std::vector<GCM::Polynomial>
 GCM::CantorZassenhaus::zeros(GCM::CantorZassenhaus::Polynomial x) {
   x.ensure_monic();
-  std::vector<GCM::CantorZassenhaus::Polynomial> factors{x};
-  bool found_new_factors = true;
-  while (found_new_factors) {
-    found_new_factors = false;
-    std::vector<std::size_t> to_remove{};
-    std::size_t size = factors.size();
-    for (std::size_t i = 0; i < size; ++i) {
+  std::vector<GCM::CantorZassenhaus::Polynomial> factors{};
+  std::vector<GCM::CantorZassenhaus::Polynomial> new_factors{x};
+  std::vector<GCM::CantorZassenhaus::Polynomial> final_factors{};
+  while (new_factors.size() != 0) {
+    factors = new_factors;
+    new_factors.clear();
+    for (std::size_t i = 0; i < factors.size(); ++i) {
       if (factors.at(i).degree() == 1) {
+        final_factors.push_back(factors.at(i));
         continue;
       }
       std::vector<GCM::CantorZassenhaus::Polynomial> subfactors;
       while ((subfactors = cantor_zassenhaus(x, factors.at(i))).size() != 2)
         ;
-      to_remove.push_back(i);
-      factors.push_back(subfactors.at(0));
-      factors.push_back(subfactors.at(1));
-      found_new_factors = true;
-    }
-    for (const std::size_t &i : to_remove) {
-      factors.erase(factors.begin() + i);
+      new_factors.push_back(subfactors.at(0));
+      new_factors.push_back(subfactors.at(1));
     }
   }
 
   std::vector<GCM::Polynomial> zeros;
-  for (std::size_t i = 0; i < factors.size(); ++i) {
-    assert(factors.at(i).degree() == 1);
-    zeros.push_back(factors.at(i).coefficient(0));
+  for (std::size_t i = 0; i < final_factors.size(); ++i) {
+    assert(final_factors.at(i).degree() == 1);
+    zeros.push_back(final_factors.at(i).coefficient(0));
   }
   return zeros;
 }

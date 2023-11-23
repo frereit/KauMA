@@ -1,7 +1,10 @@
 #pragma once
 #include <algorithm>
+#include <botan/hex.h>
 #include <cassert>
+#include <nlohmann/json.hpp>
 #include <ranges>
+#include <string>
 #include <tuple>
 #include <vector>
 
@@ -107,6 +110,15 @@ public:
   /// @param degree the degree of the resulting polynomial
   /// @return a random polynomial
   static Polynomial random(std::size_t degree);
+
+  nlohmann::json to_json() {
+    std::vector<std::string> coefficients;
+    for (std::size_t i = 0; i < this->m_coeffs.size(); ++i) {
+      coefficients.push_back(
+          Botan::hex_encode(this->m_coeffs.at(i).to_gcm_bytes()));
+    }
+    return nlohmann::json(coefficients);
+  }
 
 private:
   std::vector<GCM::Polynomial> m_coeffs;

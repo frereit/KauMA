@@ -12,6 +12,11 @@
         "auth_tag": "1Kjp46tMWRbs7yUVCFfNQw=="
     },
     "msg3": {
+        "ciphertext": "MBmHXWNJwfLdGApQCQfBNVY+u04oFUcZD8oJWeTabBuvyztvyC3u12A54F1fmKWb",
+        "associated_data": "",
+        "auth_tag": "rtngYKTfT7rTb3CX0/j9fw=="
+    },
+    "msg4": {
         "ciphertext": "qIEf1OrAQfLdGApQCQfBNVY+u099chd+XMoJWeTabBuvyzoOWKUh9On738VfmKWb",
         "associated_data": ""
     }

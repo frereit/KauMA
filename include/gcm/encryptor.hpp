@@ -43,9 +43,6 @@ private:
   std::vector<std::uint8_t>
   authenticate(std::vector<std::uint8_t> ciphertext,
                std::vector<std::uint8_t> associated_data);
-  std::vector<std::uint8_t> ghash(std::vector<std::uint8_t> ciphertext,
-                                  std::vector<std::uint8_t> associated_data,
-                                  std::vector<std::uint8_t> key);
 
   const std::unique_ptr<Botan::BlockCipher> m_cipher;
   std::vector<std::uint8_t> m_y0;

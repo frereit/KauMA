@@ -9,6 +9,7 @@
 
 #include "bytemanipulation.hpp"
 #include "gcm/encryptor.hpp"
+#include "gcm/ghash.hpp"
 #include "gcm/polynomial.hpp"
 
 GCM::Encryptor::Encryptor(std::unique_ptr<Botan::BlockCipher> cipher,
@@ -22,7 +23,7 @@ GCM::Encryptor::Encryptor(std::unique_ptr<Botan::BlockCipher> cipher,
     m_y0.resize(this->m_cipher->block_size(), 0);
     m_y0.back() = 1;
   } else {
-    m_y0 = this->ghash(nonce, {}, this->h());
+    m_y0 = GCM::ghash(nonce, {}, this->h());
   }
 }
 
@@ -73,7 +74,7 @@ std::vector<std::uint8_t>
 GCM::Encryptor::authenticate(std::vector<std::uint8_t> ciphertext,
                              std::vector<std::uint8_t> associated_data) {
   std::vector<std::uint8_t> auth_tag =
-      this->ghash(ciphertext, associated_data, this->h());
+      GCM::ghash(ciphertext, associated_data, this->h());
 
   std::vector<std::uint8_t> auth_tag_mask = this->y0();
   this->m_cipher->encrypt(auth_tag_mask);
@@ -81,40 +82,6 @@ GCM::Encryptor::authenticate(std::vector<std::uint8_t> ciphertext,
   std::transform(auth_tag.begin(), auth_tag.end(), auth_tag_mask.begin(),
                  auth_tag.begin(), std::bit_xor<uint8_t>());
   return auth_tag;
-}
-
-std::vector<std::uint8_t>
-GCM::Encryptor::ghash(std::vector<std::uint8_t> ciphertext,
-                      std::vector<std::uint8_t> associated_data,
-                      std::vector<std::uint8_t> key) {
-  GCM::Polynomial auth_tag = GCM::Polynomial(std::bitset<128>(0));
-  GCM::Polynomial auth_key = GCM::Polynomial::from_gcm_bytes(key);
-
-  for (const auto &v : {associated_data, ciphertext}) {
-    for (std::size_t i = 0; i < v.size(); i += this->m_cipher->block_size()) {
-      std::vector<std::uint8_t>::const_iterator end;
-      if (i + this->m_cipher->block_size() >= v.size()) {
-        end = v.end();
-      } else {
-        end = v.begin() + i + this->m_cipher->block_size();
-      }
-
-      std::vector<std::uint8_t> block(v.begin() + i, end);
-      block.resize(this->m_cipher->block_size(), 0);
-      auth_tag += GCM::Polynomial::from_gcm_bytes(block);
-      auth_tag *= auth_key;
-    }
-  }
-
-  std::vector<std::uint8_t> length;
-  ByteManipulation::append_as_bytes<std::uint64_t>(associated_data.size() * 8,
-                                                   std::endian::big, length);
-  ByteManipulation::append_as_bytes<std::uint64_t>(ciphertext.size() * 8,
-                                                   std::endian::big, length);
-  auth_tag += GCM::Polynomial::from_gcm_bytes(length);
-  auth_tag *= auth_key;
-
-  return auth_tag.to_gcm_bytes();
 }
 
 #ifdef TEST

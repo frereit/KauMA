@@ -54,7 +54,7 @@ public:
   }
 
   friend bool operator==(Polynomial lhs, const Polynomial &rhs) {
-    if (lhs.degree() != rhs.degree())
+    if (lhs.m_coeffs.size() != rhs.m_coeffs.size())
       return false;
     for (std::size_t i = 0; i < lhs.m_coeffs.size(); ++i) {
       if (lhs.coefficient(i) != rhs.coefficient(i)) {

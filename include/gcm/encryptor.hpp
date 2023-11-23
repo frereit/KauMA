@@ -8,6 +8,7 @@ namespace GCM {
 /// @brief A ciphertext and associated auth tag
 struct EncryptionResult {
   const std::vector<std::uint8_t> ciphertext;
+  const std::vector<std::uint8_t> associated_data;
   const std::vector<std::uint8_t> auth_tag;
 };
 

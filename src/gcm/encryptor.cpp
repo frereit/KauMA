@@ -33,7 +33,7 @@ GCM::EncryptionResult GCM::Encryptor::encrypt_and_authenticate(
   std::vector<std::uint8_t> ciphertext = this->encrypt(plaintext);
   std::vector<std::uint8_t> auth_tag =
       this->authenticate(ciphertext, associated_data);
-  return {ciphertext, auth_tag};
+  return {ciphertext, associated_data, auth_tag};
 }
 
 std::vector<std::uint8_t> GCM::Encryptor::y0() { return this->m_y0; }

@@ -71,6 +71,10 @@ public:
   /// is 1.
   void ensure_monic();
 
+  /// @brief calling this function ensures that the highest order coefficient is
+  /// nonzero.
+  void ensure_normalized();
+
   template <std::size_t l>
   Polynomial pow(std::bitset<l> exponents, Polynomial mod) const {
     if (exponents.size() == 0) {

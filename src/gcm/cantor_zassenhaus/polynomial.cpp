@@ -20,25 +20,22 @@ GCM::CantorZassenhaus::Polynomial::operator+=(
   for (std::size_t i = 0; i < rhs.m_coeffs.size(); ++i) {
     this->m_coeffs.at(i) += rhs.m_coeffs.at(i);
   }
-
-  while (this->m_coeffs.size() > 0 &&
-         this->m_coeffs.back() == GCM::Polynomial(0)) {
-    this->m_coeffs.pop_back();
-  }
+  this->ensure_normalized();
   return *this;
 }
 
 GCM::CantorZassenhaus::Polynomial GCM::CantorZassenhaus::Polynomial::operator*(
     const GCM::CantorZassenhaus::Polynomial &rhs) {
-  std::vector<GCM::Polynomial> out(this->degree() + rhs.degree() + 1,
-                                   GCM::Polynomial(0));
+  GCM::CantorZassenhaus::Polynomial out(std::vector<GCM::Polynomial>(
+      this->degree() + rhs.degree() + 1, GCM::Polynomial(0)));
 
   for (std::size_t i = 0; i < this->m_coeffs.size(); ++i) {
     for (std::size_t j = 0; j < rhs.m_coeffs.size(); ++j) {
-      out.at(i + j) += this->m_coeffs.at(i) * rhs.m_coeffs.at(j);
+      out.coefficient(i + j) += this->m_coeffs.at(i) * rhs.m_coeffs.at(j);
     }
   }
 
+  out.ensure_normalized();
   return out;
 }
 
@@ -61,16 +58,26 @@ GCM::CantorZassenhaus::Polynomial::divmod(
     r -= factor * divisor;
   }
   assert(q * divisor + r == *this);
+  q.ensure_normalized();
+  r.ensure_normalized();
   return {q, r};
 }
 
 void GCM::CantorZassenhaus::Polynomial::ensure_monic() {
+  this->ensure_normalized();
   while (this->m_coeffs.size() > 0 &&
          this->m_coeffs.back() == GCM::Polynomial(0)) {
     this->m_coeffs.pop_back();
   }
   for (std::size_t i = 0; i < this->m_coeffs.size(); ++i) {
     this->m_coeffs.at(i) /= this->m_coeffs.back();
+  }
+}
+
+void GCM::CantorZassenhaus::Polynomial::ensure_normalized() {
+  while (this->m_coeffs.size() > 0 &&
+         this->m_coeffs.back() == GCM::Polynomial(0)) {
+    this->m_coeffs.pop_back();
   }
 }
 
@@ -126,5 +133,19 @@ TEST_CASE("Cantor-Zassenhaus polynomial arithmetic") {
   CHECK(factor_a * factor_b == product);
   auto [quotient, remainder] = product.divmod(factor_a);
   CHECK(quotient == factor_b);
+}
+
+TEST_CASE("Cantor-Zassenhaus polynomial exponentation with zero result") {
+  GCM::CantorZassenhaus::Polynomial x(
+      {GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("0000000000244141663CE8FDA40E6BD1")),
+       GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("0000000000244141663CE8FDA40E6BD1")),
+       GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("0000000000244141663CE8FDA40E6BD1"))});
+  GCM::CantorZassenhaus::Polynomial mod(
+      {GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("000000000000000001B88015EB95DB33")),
+       GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("000000000000000001B88015EB95DB33")),
+       GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("000000000000000001B88015EB95DB33"))});
+  auto res = x.pow(std::bitset<20>(1000000), mod);
+  CHECK(res ==
+        GCM::CantorZassenhaus::Polynomial(std::vector<GCM::Polynomial>()));
 }
 #endif

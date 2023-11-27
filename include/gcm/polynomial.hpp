@@ -4,6 +4,7 @@
 #include <set>
 #include <stdexcept>
 #include <vector>
+#include <ranges>
 
 namespace GCM {
 

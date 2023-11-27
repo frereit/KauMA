@@ -3,22 +3,36 @@
 #include <cstdint>
 #include <vector>
 
+#include "gcm/ghash.hpp"
+
 namespace GCM {
 
 /// @brief A ciphertext and associated auth tag
 struct EncryptionResult {
   const std::vector<std::uint8_t> ciphertext;
+  const std::vector<std::uint8_t> associated_data;
   const std::vector<std::uint8_t> auth_tag;
 };
 
 class Encryptor {
 public:
-  Encryptor(const std::unique_ptr<Botan::BlockCipher> cipher,
+  /// @brief start a new encryption process
+  /// @param associated_data the associated data for the encryption
+  /// @param cipher the block cipher for CTR mode
+  /// @param nonce the nonce to use for CTR mode
+  Encryptor(std::vector<std::uint8_t> associated_data,
+            const std::unique_ptr<Botan::BlockCipher> cipher,
             const std::vector<std::uint8_t> &nonce);
 
-  EncryptionResult
-  encrypt_and_authenticate(std::vector<std::uint8_t> plaintext,
-                           std::vector<std::uint8_t> associated_data);
+  /// @brief encrypt a given plaintext and update the internal state
+  /// @param plaintext the plaintext to encrypt
+  /// @return the ciphertext correspnding to the plaintext
+  std::vector<std::uint8_t> update(std::vector<std::uint8_t> plaintext);
+
+  /// @brief compute the auth tag for the associated data and all encrypted
+  /// plaintext
+  /// @return the auth tag
+  std::vector<std::uint8_t> finalize();
 
   /// @brief generate the block used to generate the auth tag mask
   /// @return the block \f$Y_0 = \mathrm{Nonce} || \mathrm{Ctr 1}\f$
@@ -39,16 +53,12 @@ private:
 #endif
 
   std::vector<std::uint8_t> y_block(std::uint32_t ctr);
-  std::vector<std::uint8_t> encrypt(std::vector<std::uint8_t> plaintext);
-  std::vector<std::uint8_t>
-  authenticate(std::vector<std::uint8_t> ciphertext,
-               std::vector<std::uint8_t> associated_data);
-  std::vector<std::uint8_t> ghash(std::vector<std::uint8_t> ciphertext,
-                                  std::vector<std::uint8_t> associated_data,
-                                  std::vector<std::uint8_t> key);
 
   const std::unique_ptr<Botan::BlockCipher> m_cipher;
   std::vector<std::uint8_t> m_y0;
+  std::uint32_t m_y;
+  std::vector<std::uint8_t> m_keystream;
+  GCM::GHASH m_hasher;
 };
 
 } // namespace GCM

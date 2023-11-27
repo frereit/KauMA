@@ -20,13 +20,12 @@ json Actions::aes_128_gcm_encrypt(const json &input) {
 
   auto aes = Botan::BlockCipher::create_or_throw("AES-128");
   aes->set_key(key);
-  GCM::Encryptor e = GCM::Encryptor(std::move(aes), nonce);
-  GCM::EncryptionResult result =
-      e.encrypt_and_authenticate(plaintext, associated_data);
+  GCM::Encryptor e = GCM::Encryptor(associated_data, std::move(aes), nonce);
+  std::vector<std::uint8_t> ciphertext = e.update(plaintext);
+  std::vector<std::uint8_t> auth_tag = e.finalize();
 
-  return json(
-      {{"ciphertext", cppcodec::base64_rfc4648::encode(result.ciphertext)},
-       {"auth_tag", cppcodec::base64_rfc4648::encode(result.auth_tag)},
-       {"Y0", cppcodec::base64_rfc4648::encode(e.y0())},
-       {"H", cppcodec::base64_rfc4648::encode(e.h())}});
+  return json({{"ciphertext", cppcodec::base64_rfc4648::encode(ciphertext)},
+               {"auth_tag", cppcodec::base64_rfc4648::encode(auth_tag)},
+               {"Y0", cppcodec::base64_rfc4648::encode(e.y0())},
+               {"H", cppcodec::base64_rfc4648::encode(e.h())}});
 }

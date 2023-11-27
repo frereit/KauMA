@@ -17,11 +17,15 @@ std::vector<std::uint8_t> recover_auth_tag(GCM::EncryptionResult msg1,
                                            GCM::EncryptionResult msg3,
                                            GCM::EncryptionResult unknown);
 
-GCM::CantorZassenhaus::Polynomial gen_poly(GCM::EncryptionResult msg1, GCM::EncryptionResult msg2);
+GCM::CantorZassenhaus::Polynomial gen_poly(GCM::EncryptionResult msg1,
+                                           GCM::EncryptionResult msg2);
 
-std::vector<std::uint8_t> gen_auth_tag(GCM::EncryptionResult msg1, GCM::EncryptionResult msg2, GCM::Polynomial h);
+std::vector<std::uint8_t> gen_auth_tag(GCM::EncryptionResult msg1,
+                                       GCM::EncryptionResult msg2,
+                                       GCM::Polynomial h);
 
-std::vector<std::uint8_t> gen_auth_tag_mask(GCM::EncryptionResult msg, GCM::Polynomial h);
+std::vector<std::uint8_t> gen_auth_tag_mask(GCM::EncryptionResult msg,
+                                            GCM::Polynomial h);
 
 /// @brief Convert a ciphertext and associated data to a list of Polynomials
 /// @param ciphertext the ciphertext to use for GHASH

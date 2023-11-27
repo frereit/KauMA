@@ -137,13 +137,19 @@ TEST_CASE("Cantor-Zassenhaus polynomial arithmetic") {
 
 TEST_CASE("Cantor-Zassenhaus polynomial exponentation with zero result") {
   GCM::CantorZassenhaus::Polynomial x(
-      {GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("0000000000244141663CE8FDA40E6BD1")),
-       GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("0000000000244141663CE8FDA40E6BD1")),
-       GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("0000000000244141663CE8FDA40E6BD1"))});
+      {GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("0000000000244141663CE8FDA40E6BD1")),
+       GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("0000000000244141663CE8FDA40E6BD1")),
+       GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("0000000000244141663CE8FDA40E6BD1"))});
   GCM::CantorZassenhaus::Polynomial mod(
-      {GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("000000000000000001B88015EB95DB33")),
-       GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("000000000000000001B88015EB95DB33")),
-       GCM::Polynomial::from_gcm_bytes(Botan::hex_decode("000000000000000001B88015EB95DB33"))});
+      {GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("000000000000000001B88015EB95DB33")),
+       GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("000000000000000001B88015EB95DB33")),
+       GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("000000000000000001B88015EB95DB33"))});
   auto res = x.pow(std::bitset<20>(1000000), mod);
   CHECK(res ==
         GCM::CantorZassenhaus::Polynomial(std::vector<GCM::Polynomial>()));

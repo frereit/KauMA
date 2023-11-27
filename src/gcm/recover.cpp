@@ -75,8 +75,9 @@ GCM::Recovery::gen_poly(GCM::EncryptionResult msg1,
   return f;
 }
 
-std::vector<std::uint8_t> GCM::Recovery::gen_auth_tag(GCM::EncryptionResult msg1, GCM::EncryptionResult msg2,
-                  GCM::Polynomial h) {
+std::vector<std::uint8_t>
+GCM::Recovery::gen_auth_tag(GCM::EncryptionResult msg1,
+                            GCM::EncryptionResult msg2, GCM::Polynomial h) {
   std::vector<std::uint8_t> mask = GCM::Recovery::gen_auth_tag_mask(msg1, h);
   std::vector<std::uint8_t> tag =
       GCM::ghash(msg2.ciphertext, msg2.associated_data, h.to_gcm_bytes());
@@ -86,8 +87,8 @@ std::vector<std::uint8_t> GCM::Recovery::gen_auth_tag(GCM::EncryptionResult msg1
   return tag;
 }
 
-std::vector<std::uint8_t> GCM::Recovery::gen_auth_tag_mask(GCM::EncryptionResult msg,
-                                            GCM::Polynomial h) {
+std::vector<std::uint8_t>
+GCM::Recovery::gen_auth_tag_mask(GCM::EncryptionResult msg, GCM::Polynomial h) {
   std::vector<std::uint8_t> raw_tag =
       GCM::ghash(msg.ciphertext, msg.associated_data, h.to_gcm_bytes());
   std::vector<std::uint8_t> mask = msg.auth_tag;

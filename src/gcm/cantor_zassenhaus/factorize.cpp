@@ -45,6 +45,7 @@ GCM::CantorZassenhaus::cantor_zassenhaus(GCM::CantorZassenhaus::Polynomial f,
                 "010101010101010101010101010101010101010101010101010101010101"),
             f) -
       GCM::CantorZassenhaus::Polynomial({GCM::Polynomial(1)});
+
   GCM::CantorZassenhaus::Polynomial q = GCM::CantorZassenhaus::gcd(p, g);
   q.ensure_monic();
   p.ensure_monic();

@@ -1,6 +1,8 @@
 #pragma once
 #include <algorithm>
 #include <cassert>
+#include <cppcodec/base64_default_rfc4648.hpp>
+#include <iostream>
 #include <nlohmann/json.hpp>
 #include <ranges>
 #include <string>
@@ -115,6 +117,18 @@ public:
   static Polynomial random(std::size_t degree);
 
   nlohmann::json to_json();
+
+  friend std::ostream &operator<<(std::ostream &os, Polynomial &poly) {
+    if (poly.empty())
+      return os << "0";
+    for (std::size_t i = 0; i <= poly.degree(); ++i) {
+      os << "(" << poly.coefficient(poly.degree() - i) << ")*X^"
+         << (poly.degree() - i);
+      if (i != poly.degree())
+        os << " + ";
+    }
+    return os;
+  }
 
 private:
   std::vector<GCM::Polynomial> m_coeffs;

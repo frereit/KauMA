@@ -66,11 +66,11 @@ GCM::Recovery::gen_poly(GCM::EncryptionResult msg1,
       std::vector<GCM::Polynomial>(degree + 1, GCM::Polynomial(0)));
   f.coefficient(0) = tu - tv;
   for (std::size_t i = 1; i <= degree; ++i) {
-    std::size_t index = degree - i;
-    if (index < msg1_polys.size())
-      f.coefficient(i) += msg1_polys.at(index);
-    if (index < msg2_polys.size())
-      f.coefficient(i) -= msg2_polys.at(index);
+    if (i <= msg1_polys.size()) {
+      f.coefficient(i) += msg1_polys.at(msg1_polys.size() - i);
+    }
+    if (i <= msg2_polys.size())
+      f.coefficient(i) -= msg2_polys.at(msg2_polys.size() - i);
   }
   return f;
 }

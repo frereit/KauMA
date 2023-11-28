@@ -1,10 +1,14 @@
 #include <cassert>
+#include <cstdint>
+#include <iostream>
+#include <vector>
 
 #include "gcm/cantor_zassenhaus/factorize.hpp"
 
 std::vector<GCM::Polynomial>
 GCM::CantorZassenhaus::zeros(GCM::CantorZassenhaus::Polynomial x) {
   x.ensure_monic();
+  std::cerr << "Finding zeros for " << x << "\n";
   std::vector<GCM::CantorZassenhaus::Polynomial> factors{};
   std::vector<GCM::CantorZassenhaus::Polynomial> new_factors{x};
   std::vector<GCM::CantorZassenhaus::Polynomial> final_factors{};
@@ -27,6 +31,7 @@ GCM::CantorZassenhaus::zeros(GCM::CantorZassenhaus::Polynomial x) {
   std::vector<GCM::Polynomial> zeros;
   for (std::size_t i = 0; i < final_factors.size(); ++i) {
     assert(final_factors.at(i).degree() == 1);
+    std::cerr << "Zero at " << final_factors.at(i).coefficient(0) << "\n";
     zeros.push_back(final_factors.at(i).coefficient(0));
   }
   return zeros;
@@ -35,8 +40,12 @@ GCM::CantorZassenhaus::zeros(GCM::CantorZassenhaus::Polynomial x) {
 std::vector<GCM::CantorZassenhaus::Polynomial>
 GCM::CantorZassenhaus::cantor_zassenhaus(GCM::CantorZassenhaus::Polynomial f,
                                          GCM::CantorZassenhaus::Polynomial p) {
+  std::cerr << "CZ(" << f << ", " << p << ")\n";
+
   GCM::CantorZassenhaus::Polynomial h =
       GCM::CantorZassenhaus::Polynomial::random(f.degree() - 1);
+  std::cerr << "\th = " << h << "\n";
+
   GCM::CantorZassenhaus::Polynomial g =
       // This 127 bit number is (2^128 - 1) / 3.
       h.pow(std::bitset<127>(
@@ -45,9 +54,12 @@ GCM::CantorZassenhaus::cantor_zassenhaus(GCM::CantorZassenhaus::Polynomial f,
                 "010101010101010101010101010101010101010101010101010101010101"),
             f) -
       GCM::CantorZassenhaus::Polynomial({GCM::Polynomial(1)});
+  std::cerr << "\tg = " << g << "\n";
 
   GCM::CantorZassenhaus::Polynomial q = GCM::CantorZassenhaus::gcd(p, g);
   q.ensure_monic();
+  std::cerr << "\tq = " << q << "\n";
+
   p.ensure_monic();
   if (q != GCM::CantorZassenhaus::Polynomial({GCM::Polynomial(1)}) && q != p) {
     GCM::CantorZassenhaus::Polynomial k1 = q;
@@ -56,8 +68,12 @@ GCM::CantorZassenhaus::cantor_zassenhaus(GCM::CantorZassenhaus::Polynomial f,
     assert(remainder == GCM::CantorZassenhaus::Polynomial({}) &&
            "Expected no remainder dividing by gcd.");
     assert(k1 * k2 == p && "Found factors do not multiply to the polynomial");
+    std::cerr << "\tk1 = " << k1 << "\n";
+    std::cerr << "\tk2 = " << k2 << "\n";
+    std::cerr << "\tCZ success.\n";
     return {k1, k2};
   }
+  std::cerr << "\tCZ failure.\n";
   return std::vector<GCM::CantorZassenhaus::Polynomial>();
 }
 

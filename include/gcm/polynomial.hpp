@@ -1,10 +1,12 @@
 #pragma once
 #include <bitset>
 #include <cassert>
+#include <cppcodec/base64_default_rfc4648.hpp>
+#include <iostream>
+#include <ranges>
 #include <set>
 #include <stdexcept>
 #include <vector>
-#include <ranges>
 
 namespace GCM {
 
@@ -122,6 +124,10 @@ public:
   friend Polynomial operator/(Polynomial lhs, const Polynomial &rhs) {
     lhs /= rhs;
     return lhs;
+  }
+
+  friend std::ostream &operator<<(std::ostream &os, Polynomial &poly) {
+    return os << cppcodec::base64_rfc4648::encode(poly.to_gcm_bytes());
   }
 
 private:

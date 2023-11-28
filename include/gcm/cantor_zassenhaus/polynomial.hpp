@@ -1,7 +1,8 @@
 #pragma once
 #include <algorithm>
-#include <botan/hex.h>
 #include <cassert>
+#include <cppcodec/base64_default_rfc4648.hpp>
+#include <iostream>
 #include <nlohmann/json.hpp>
 #include <ranges>
 #include <string>
@@ -115,13 +116,18 @@ public:
   /// @return a random polynomial
   static Polynomial random(std::size_t degree);
 
-  nlohmann::json to_json() {
-    std::vector<std::string> coefficients;
-    for (std::size_t i = 0; i < this->m_coeffs.size(); ++i) {
-      coefficients.push_back(
-          Botan::hex_encode(this->m_coeffs.at(i).to_gcm_bytes()));
+  nlohmann::json to_json();
+
+  friend std::ostream &operator<<(std::ostream &os, Polynomial &poly) {
+    if (poly.empty())
+      return os << "0";
+    for (std::size_t i = 0; i <= poly.degree(); ++i) {
+      os << "(" << poly.coefficient(poly.degree() - i) << ")*X^"
+         << (poly.degree() - i);
+      if (i != poly.degree())
+        os << " + ";
     }
-    return nlohmann::json(coefficients);
+    return os;
   }
 
 private:

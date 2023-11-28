@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <cassert>
+#include <cppcodec/base64_default_rfc4648.hpp>
+#include <iostream>
 #include <vector>
 
 #include "bytemanipulation.hpp"
@@ -12,8 +14,11 @@ std::vector<std::uint8_t> GCM::Recovery::recover_auth_tag(
     GCM::EncryptionResult msg1, GCM::EncryptionResult msg2,
     GCM::EncryptionResult msg3, GCM::EncryptionResult msg4) {
   GCM::CantorZassenhaus::Polynomial f = GCM::Recovery::gen_poly(msg1, msg2);
+  std::cerr << "f = " << f << "\n";
   std::vector<GCM::Polynomial> h_candidates = GCM::CantorZassenhaus::zeros(f);
 
+  std::cerr << "Searching for valid h using msg3 auth tag "
+            << cppcodec::base64_rfc4648::encode(msg3.auth_tag) << "\n";
   while (h_candidates.size() > 0 &&
          GCM::Recovery::gen_auth_tag(msg1, msg3, h_candidates.back()) !=
              msg3.auth_tag) {
@@ -21,6 +26,7 @@ std::vector<std::uint8_t> GCM::Recovery::recover_auth_tag(
   }
   assert(h_candidates.size() > 0 && "No candidates for H found.");
 
+  std::cerr << "Valid h = " << h_candidates.back() << "\n";
   return GCM::Recovery::gen_auth_tag(msg1, msg4, h_candidates.back());
 }
 
@@ -59,18 +65,26 @@ GCM::Recovery::gen_poly(GCM::EncryptionResult msg1,
   auto tv = GCM::Polynomial::from_gcm_bytes(msg2.auth_tag);
   std::vector<GCM::Polynomial> msg1_polys =
       GCM::Recovery::as_ghash_polys(msg1.ciphertext, msg1.associated_data);
+  std::cerr << "msg1 GHASH blocks:";
+  for (auto &poly : msg1_polys)
+    std::cerr << " " << poly;
+  std::cerr << "\n";
   std::vector<GCM::Polynomial> msg2_polys =
       GCM::Recovery::as_ghash_polys(msg2.ciphertext, msg2.associated_data);
+  std::cerr << "msg2 GHASH blocks:";
+  for (auto &poly : msg2_polys)
+    std::cerr << " " << poly;
+  std::cerr << "\n";
   std::size_t degree = std::max(msg1_polys.size(), msg2_polys.size());
   GCM::CantorZassenhaus::Polynomial f(
       std::vector<GCM::Polynomial>(degree + 1, GCM::Polynomial(0)));
   f.coefficient(0) = tu - tv;
   for (std::size_t i = 1; i <= degree; ++i) {
-    std::size_t index = degree - i;
-    if (index < msg1_polys.size())
-      f.coefficient(i) += msg1_polys.at(index);
-    if (index < msg2_polys.size())
-      f.coefficient(i) -= msg2_polys.at(index);
+    if (i <= msg1_polys.size()) {
+      f.coefficient(i) += msg1_polys.at(msg1_polys.size() - i);
+    }
+    if (i <= msg2_polys.size())
+      f.coefficient(i) -= msg2_polys.at(msg2_polys.size() - i);
   }
   return f;
 }
@@ -78,12 +92,20 @@ GCM::Recovery::gen_poly(GCM::EncryptionResult msg1,
 std::vector<std::uint8_t>
 GCM::Recovery::gen_auth_tag(GCM::EncryptionResult msg1,
                             GCM::EncryptionResult msg2, GCM::Polynomial h) {
+  std::cerr << "Generating auth tag using h = " << h << "\n";
+
   std::vector<std::uint8_t> mask = GCM::Recovery::gen_auth_tag_mask(msg1, h);
+  std::cerr << "\tmask = " << cppcodec::base64_rfc4648::encode(mask) << "\n";
+
   std::vector<std::uint8_t> tag =
       GCM::ghash(msg2.ciphertext, msg2.associated_data, h.to_gcm_bytes());
+  std::cerr << "\ttag = " << cppcodec::base64_rfc4648::encode(tag) << "\n";
 
   std::transform(tag.begin(), tag.end(), mask.begin(), tag.begin(),
                  std::bit_xor<std::uint8_t>());
+  std::cerr << "\tmask ^ tag = " << cppcodec::base64_rfc4648::encode(tag)
+            << "\n";
+
   return tag;
 }
 

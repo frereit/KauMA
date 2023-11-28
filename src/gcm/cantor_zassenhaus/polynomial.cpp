@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <cassert>
+#include <cppcodec/base64_default_rfc4648.hpp>
+#include <nlohmann/json.hpp>
 #include <ranges>
 #include <tuple>
 #include <vector>
@@ -88,6 +90,15 @@ GCM::CantorZassenhaus::Polynomial::random(std::size_t degree) {
     rand.push_back(GCM::Polynomial::random());
   }
   return GCM::CantorZassenhaus::Polynomial(rand);
+}
+
+nlohmann::json GCM::CantorZassenhaus::Polynomial::to_json() {
+  std::vector<std::string> coefficients;
+  for (std::size_t i = 0; i < this->m_coeffs.size(); ++i) {
+    coefficients.push_back(
+        cppcodec::base64_rfc4648::encode(this->m_coeffs.at(i).to_gcm_bytes()));
+  }
+  return nlohmann::json(coefficients);
 }
 
 #ifdef TEST

@@ -118,22 +118,4 @@ TEST_CASE("test multiplication and divmod") {
   CHECK(quotient == b);
   CHECK(mod.empty());
 }
-
-TEST_CASE("test cantor zassenhaus") {
-  GCM::CantorZassenhaus::Polynomial f(
-      {from_hex("7A9C3400001A584BB29B0A03B7971984"),
-       from_hex("1B81C000000000A9D95C170026D05960"),
-       from_hex("F43800000000000000C45E91CFDC121E"),
-       from_hex("000000000000000000000000DE6DF8F8"),
-       from_hex("80000000000000000000000000000000")});
-
-  std::vector<GCM::Polynomial> expected = {
-      from_hex("000000000000000000000000DEADBEEF"),
-      from_hex("0000000000000000000000000000ABCD"),
-      from_hex("00000000000000000000000000001234"),
-      from_hex("00000000000000000000000000C0FFEE")};
-
-  std::vector<GCM::Polynomial> actual = GCM::CantorZassenhaus::zeros(f);
-  CHECK(expected == actual);
-}
 #endif

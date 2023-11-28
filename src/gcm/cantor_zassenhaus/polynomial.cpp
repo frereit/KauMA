@@ -103,6 +103,7 @@ nlohmann::json GCM::CantorZassenhaus::Polynomial::to_json() {
 
 #ifdef TEST
 #include "doctest.h"
+#include <botan/hex.h>
 
 #include <gcm/cantor_zassenhaus/polynomial.hpp>
 

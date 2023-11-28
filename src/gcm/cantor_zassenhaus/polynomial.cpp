@@ -86,7 +86,7 @@ void GCM::CantorZassenhaus::Polynomial::ensure_normalized() {
 GCM::CantorZassenhaus::Polynomial
 GCM::CantorZassenhaus::Polynomial::random(std::size_t degree) {
   std::vector<GCM::Polynomial> rand;
-  for (std::size_t i = 0; i < degree; ++i) {
+  for (std::size_t i = 0; i <= degree; ++i) {
     rand.push_back(GCM::Polynomial::random());
   }
   return GCM::CantorZassenhaus::Polynomial(rand);

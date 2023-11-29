@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/frereit/KauMA/compare/v1.0.0...v2.0.0) (2023-11-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* Change everything
+
+### Features
+
+* Change everything ([2a5fc4f](https://github.com/frereit/KauMA/commit/2a5fc4fe4d134ffb79731e4bb6cdd22c72628022))
+
 ## 1.0.0 (2023-11-29)
 
 

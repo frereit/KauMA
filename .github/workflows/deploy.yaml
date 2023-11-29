@@ -1,0 +1,51 @@
+on:
+  push:
+    branches:
+      - main
+name: Build, Test and Release
+permissions: write-all
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: sudo apt install -y libbotan-2-dev nlohmann-json3-dev doxygen
+      - name: Unit tests
+        run: make unittest
+      - name: System test
+        run: make clean && make && (./kauma examples/padding-oracle-attack/server.json & (make systemtest && pkill -9 -f kauma))
+      - name: Create release build
+        run: make clean && make release
+      - name: Archive release build
+        uses: actions/upload-artifact@v3
+        with:
+          name: kauma
+          path: out/apps/kauma
+          if-no-files-found: error
+      - name: Create docs
+        run: make docs
+      - name: Deploy docs
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: out/docs/html
+  release-please:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          release-type: simple
+      - name: Download workflow artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: kauma
+      - name: Upload Release Artifact
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ steps.release.outputs.tag_name }} ./kauma

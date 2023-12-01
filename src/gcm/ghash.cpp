@@ -10,7 +10,7 @@
 
 GCM::GHASH::GHASH(std::vector<std::uint8_t> associated_data,
                   std::vector<std::uint8_t> auth_key)
-    : m_auth_tag(GCM::Polynomial(0)),
+    : m_auth_tag(GCM::Polynomial::zero()),
       m_auth_key(GCM::Polynomial::from_gcm_bytes(auth_key)),
       m_associated_data_bitlength(associated_data.size() * 8),
       m_ciphertext_bitlength(0),

@@ -77,7 +77,7 @@ GCM::Recovery::gen_poly(GCM::EncryptionResult msg1,
   std::cerr << "\n";
   std::size_t degree = std::max(msg1_polys.size(), msg2_polys.size());
   GCM::CantorZassenhaus::Polynomial f(
-      std::vector<GCM::Polynomial>(degree + 1, GCM::Polynomial(0)));
+      std::vector<GCM::Polynomial>(degree + 1, GCM::Polynomial::zero()));
   f.coefficient(0) = tu - tv;
   for (std::size_t i = 1; i <= degree; ++i) {
     if (i <= msg1_polys.size()) {

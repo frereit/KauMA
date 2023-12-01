@@ -1,10 +1,13 @@
 #pragma once
 #include <algorithm>
+#include <bitset>
 #include <cassert>
 #include <cppcodec/base64_default_rfc4648.hpp>
+#include <emmintrin.h>
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <ranges>
+#include <smmintrin.h>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -76,30 +79,11 @@ public:
   /// nonzero.
   void ensure_normalized();
 
-  template <std::size_t l>
-  Polynomial pow(std::bitset<l> exponents, Polynomial mod) const {
-    if (exponents.size() == 0) {
-      return Polynomial({GCM::Polynomial(1)});
-    }
-
-    assert(exponents.test(exponents.size() - 1) &&
-           "Exponent must be binary number with no leading zeros");
-    Polynomial out = *this;
-    for (const std::size_t &i :
-         std::views::iota(0u, exponents.size() - 1) | std::views::reverse) {
-      out *= out;
-      if (exponents.test(i)) {
-        out *= *this;
-      }
-      auto [_quotient, remainder] = out.divmod(mod);
-      out = remainder;
-    }
-    return out;
-  }
+  Polynomial pow(__m128i exponent, Polynomial mod) const;
 
   Polynomial &operator<<=(std::size_t amount) {
     for (std::size_t i = 0; i < amount; ++i) {
-      this->m_coeffs.insert(this->m_coeffs.begin(), GCM::Polynomial(0));
+      this->m_coeffs.insert(this->m_coeffs.begin(), GCM::Polynomial::zero());
     }
     return *this;
   }
@@ -110,6 +94,12 @@ public:
   }
 
   std::tuple<Polynomial, Polynomial> divmod(Polynomial divisor) const;
+
+  Polynomial &operator%=(const Polynomial &mod) {
+    auto [_q, res] = this->divmod(mod);
+    *this = res;
+    return *this;
+  }
 
   /// @brief generate a Cantor Zassenhaus polynomial with random coefficient
   /// @param degree the degree of the resulting polynomial

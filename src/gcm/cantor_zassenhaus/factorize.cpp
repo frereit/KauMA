@@ -48,12 +48,8 @@ GCM::CantorZassenhaus::cantor_zassenhaus(GCM::CantorZassenhaus::Polynomial f,
 
   GCM::CantorZassenhaus::Polynomial g =
       // This 127 bit number is (2^128 - 1) / 3.
-      h.pow(std::bitset<127>(
-                "10101010101010101010101010101010101010101010101010101010101010"
-                "10101"
-                "010101010101010101010101010101010101010101010101010101010101"),
-            f) -
-      GCM::CantorZassenhaus::Polynomial({GCM::Polynomial(1)});
+      h.pow(_mm_setr_epi32(0x55555555, 0x55555555, 0x55555555, 0x55555555), f) -
+      GCM::CantorZassenhaus::Polynomial({GCM::Polynomial::one()});
   std::cerr << "\tg = " << g << "\n";
 
   GCM::CantorZassenhaus::Polynomial q = GCM::CantorZassenhaus::gcd(p, g);
@@ -61,7 +57,8 @@ GCM::CantorZassenhaus::cantor_zassenhaus(GCM::CantorZassenhaus::Polynomial f,
   std::cerr << "\tq = " << q << "\n";
 
   p.ensure_monic();
-  if (q != GCM::CantorZassenhaus::Polynomial({GCM::Polynomial(1)}) && q != p) {
+  if (q != GCM::CantorZassenhaus::Polynomial({GCM::Polynomial::one()}) &&
+      q != p) {
     GCM::CantorZassenhaus::Polynomial k1 = q;
     auto [k2, remainder] = p.divmod(q);
     k2.ensure_monic();

@@ -1,32 +1,39 @@
 #pragma once
-#include <bitset>
 #include <cassert>
 #include <cppcodec/base64_default_rfc4648.hpp>
+#include <emmintrin.h>
 #include <iostream>
 #include <ranges>
 #include <set>
+#include <smmintrin.h>
 #include <stdexcept>
 #include <vector>
 
 namespace GCM {
 
-const std::bitset<128> REDUCTION_POLYNOMIAL(
-    "00000000000000000000000000000000000000000000000000000000000000000000000000"
-    "000000000000000000000000000000000000000000000010000111");
+const __m128i REDUCTION_POLYNOMIAL = _mm_setr_epi64(
+    _mm_set_pi64x(0), _mm_set_pi64x(1 << 7 | 1 << 2 | 1 << 1 | 1 << 0));
 
 // FIXME: This could instead be a template<std::size_t N> Galois::Polynomial to
 // support arbitrary sized fields with an arbitrary reduction polynomial.
 // However, it is much easier to always use the GCM specific polynomial for now.
 class Polynomial {
 public:
-  /// @brief construct a new Polynomial over F_(2^128) from a list of factors
+  /// @brief construct a new Polynomial over F_(2^128) from a list of factors in
+  /// GCM convention (i.e. reversed)
   /// @param polynomial \p polynomial [i] is the factor of x^i
-  Polynomial(const std::bitset<128> &polynomial) : m_polynomial(polynomial) {}
+  Polynomial(const __m128i polynomial) : m_polynomial(polynomial) {}
 
-  // FIXME: Should the below static functions be constructor overloads instead?
-  // Pro: These are, factually, constructors.
-  // Con: The overload makes it very ambigious which is which, since both
-  // from_gcm_polynomial and from_exponents take a container of std::uint8_t.
+  /// @brief construct a new Polynomial over F_(2^128) from a list of factors in
+  /// GCM convention (i.e. reversed)
+  /// @param high factors 0 to 63
+  /// @param low factors 64 to 127
+  Polynomial(const std::uint64_t high, const std::uint64_t low)
+      : m_polynomial(_mm_setr_epi64(_mm_set_pi64x(low), _mm_set_pi64x(high))) {}
+
+  static Polynomial one() { return Polynomial(1llu << 63, 0); }
+
+  static Polynomial zero() { return Polynomial(0, 0); }
 
   /// @brief construct a new Polynomial over F_(2^128) from a list of bytes,
   /// ordered as in specified in NIST Special Publication 800-38D, page 12.
@@ -57,31 +64,13 @@ public:
   /// @brief convert the Polynomial to the list of exponents.
   /// @return the polynomial has a 1 as a factor at every index
   /// specified in this vector.
-  std::vector<std::uint8_t> to_exponents();
+  std::vector<std::uint8_t> to_exponents() const;
 
-  template <std::size_t l> Polynomial pow(std::bitset<l> exponents) const {
-    if (exponents.size() == 0) {
-      return Polynomial(1);
-    }
-
-    assert(exponents.test(exponents.size() - 1) &&
-           "Exponent must be binary number with no leading zeros");
-    Polynomial out = *this;
-    for (const std::size_t &i :
-         std::views::iota(0u, exponents.size() - 1) | std::views::reverse) {
-      out *= out;
-      if (exponents.test(i)) {
-        out *= *this;
-      }
-    }
-    return out;
-  }
+  Polynomial pow(__m128i exponent) const;
 
   Polynomial modular_inverse() const {
-    return this->pow(std::bitset<128>(
-        "1111111111111111111111111111111111111111111111111111111111111111111111"
-        "11"
-        "11111111111111111111111111111111111111111111111111111110"));
+    return this->pow(
+        _mm_setr_epi32(0xfffffffe, 0xffffffff, 0xffffffff, 0xffffffff));
   }
 
   /// @brief generate a random polynomial in GF_(2^128)
@@ -94,7 +83,8 @@ public:
   Polynomial &operator/=(const Polynomial &rhs);
 
   friend inline bool operator==(const Polynomial &lhs, const Polynomial &rhs) {
-    return lhs.m_polynomial == rhs.m_polynomial;
+    __m128i diff = _mm_xor_si128(lhs.m_polynomial, rhs.m_polynomial);
+    return _mm_test_all_zeros(diff, diff);
   }
 
   friend inline bool operator!=(const Polynomial &lhs, const Polynomial &rhs) {
@@ -131,6 +121,6 @@ public:
   }
 
 private:
-  std::bitset<128> m_polynomial;
+  __m128i m_polynomial;
 };
 } // namespace GCM

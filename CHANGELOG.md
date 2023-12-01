@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/frereit/KauMA/compare/v1.0.0...v1.0.1) (2023-12-01)
+
+
+### Performance Improvements
+
+* **gcm:** Use SSE registers and PCLMULQDQ ([623ea57](https://github.com/frereit/KauMA/commit/623ea57f55bdc35243556ee4c5fefcd1d190604e))
+
 ## 1.0.0 (2023-11-29)
 
 

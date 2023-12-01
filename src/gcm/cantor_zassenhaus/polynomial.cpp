@@ -67,6 +67,27 @@ GCM::CantorZassenhaus::Polynomial::divmod(
   return {q, r};
 }
 
+GCM::CantorZassenhaus::Polynomial GCM::CantorZassenhaus::Polynomial::pow(
+    __m128i exponent, GCM::CantorZassenhaus::Polynomial mod) const {
+  __m128i lowest_bit = _mm_setr_epi32(0x1, 0, 0, 0);
+  Polynomial out({GCM::Polynomial::one()});
+  Polynomial base = *this;
+  while (!_mm_test_all_zeros(exponent, exponent)) {
+    if (!_mm_testz_si128(exponent, lowest_bit)) {
+      out *= base;
+    }
+    __m128i shifted = _mm_srli_epi32(exponent, 1);
+    __m128i carry = _mm_slli_epi32(exponent, 31);
+    carry = _mm_srli_si128(carry, 4);
+    exponent = _mm_or_si128(shifted, carry);
+    base *= base;
+
+    base %= mod;
+    out %= mod;
+  }
+  return out;
+}
+
 void GCM::CantorZassenhaus::Polynomial::ensure_monic() {
   this->ensure_normalized();
   for (std::size_t i = 0; i < this->m_coeffs.size(); ++i) {
@@ -102,6 +123,8 @@ nlohmann::json GCM::CantorZassenhaus::Polynomial::to_json() {
 #ifdef TEST
 #include "doctest.h"
 
+#include <botan/hex.h>
+
 TEST_CASE("Cantor-Zassenhaus polynomial arithmetic") {
   GCM::CantorZassenhaus::Polynomial product(
       {GCM::Polynomial(0x7a9c3400001a584b, 0xb29b0a03b7971984),
@@ -123,5 +146,24 @@ TEST_CASE("Cantor-Zassenhaus polynomial arithmetic") {
   auto [quotient, remainder] = product.divmod(factor_a);
   CHECK(quotient == factor_b);
   CHECK(remainder.empty());
+}
+
+TEST_CASE("Cantor-Zassenhaus polynomial exponentation with zero result") {
+  GCM::CantorZassenhaus::Polynomial x(
+      {GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("0000000000244141663CE8FDA40E6BD1")),
+       GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("0000000000244141663CE8FDA40E6BD1")),
+       GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("0000000000244141663CE8FDA40E6BD1"))});
+  GCM::CantorZassenhaus::Polynomial mod(
+      {GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("000000000000000001B88015EB95DB33")),
+       GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("000000000000000001B88015EB95DB33")),
+       GCM::Polynomial::from_gcm_bytes(
+           Botan::hex_decode("000000000000000001B88015EB95DB33"))});
+  auto res = x.pow(_mm_setr_epi32(1000000, 0, 0, 0), mod);
+  CHECK(res.empty());
 }
 #endif

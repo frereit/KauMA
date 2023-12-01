@@ -53,7 +53,7 @@ GCM::CantorZassenhaus::cantor_zassenhaus(GCM::CantorZassenhaus::Polynomial f,
                 "10101"
                 "010101010101010101010101010101010101010101010101010101010101"),
             f) -
-      GCM::CantorZassenhaus::Polynomial({GCM::Polynomial(1)});
+      GCM::CantorZassenhaus::Polynomial({GCM::Polynomial::one()});
   std::cerr << "\tg = " << g << "\n";
 
   GCM::CantorZassenhaus::Polynomial q = GCM::CantorZassenhaus::gcd(p, g);
@@ -61,7 +61,8 @@ GCM::CantorZassenhaus::cantor_zassenhaus(GCM::CantorZassenhaus::Polynomial f,
   std::cerr << "\tq = " << q << "\n";
 
   p.ensure_monic();
-  if (q != GCM::CantorZassenhaus::Polynomial({GCM::Polynomial(1)}) && q != p) {
+  if (q != GCM::CantorZassenhaus::Polynomial({GCM::Polynomial::one()}) &&
+      q != p) {
     GCM::CantorZassenhaus::Polynomial k1 = q;
     auto [k2, remainder] = p.divmod(q);
     k2.ensure_monic();

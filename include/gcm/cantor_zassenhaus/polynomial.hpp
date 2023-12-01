@@ -79,7 +79,7 @@ public:
   template <std::size_t l>
   Polynomial pow(std::bitset<l> exponents, Polynomial mod) const {
     if (exponents.size() == 0) {
-      return Polynomial({GCM::Polynomial(1)});
+      return Polynomial({GCM::Polynomial::one()});
     }
 
     assert(exponents.test(exponents.size() - 1) &&
@@ -99,7 +99,7 @@ public:
 
   Polynomial &operator<<=(std::size_t amount) {
     for (std::size_t i = 0; i < amount; ++i) {
-      this->m_coeffs.insert(this->m_coeffs.begin(), GCM::Polynomial(0));
+      this->m_coeffs.insert(this->m_coeffs.begin(), GCM::Polynomial::zero());
     }
     return *this;
   }

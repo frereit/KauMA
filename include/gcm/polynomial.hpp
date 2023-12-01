@@ -1,5 +1,4 @@
 #pragma once
-#include <bitset>
 #include <cassert>
 #include <cppcodec/base64_default_rfc4648.hpp>
 #include <emmintrin.h>
@@ -67,29 +66,11 @@ public:
   /// specified in this vector.
   std::vector<std::uint8_t> to_exponents() const;
 
-  template <std::size_t l> Polynomial pow(std::bitset<l> exponents) const {
-    if (exponents.size() == 0) {
-      return Polynomial::one();
-    }
-
-    assert(exponents.test(exponents.size() - 1) &&
-           "Exponent must be binary number with no leading zeros");
-    Polynomial out = *this;
-    for (const std::size_t &i :
-         std::views::iota(0u, exponents.size() - 1) | std::views::reverse) {
-      out *= out;
-      if (exponents.test(i)) {
-        out *= *this;
-      }
-    }
-    return out;
-  }
+  Polynomial pow(__m128i exponent) const;
 
   Polynomial modular_inverse() const {
-    return this->pow(std::bitset<128>(
-        "1111111111111111111111111111111111111111111111111111111111111111111111"
-        "11"
-        "11111111111111111111111111111111111111111111111111111110"));
+    return this->pow(
+        _mm_setr_epi32(0xfffffffe, 0xffffffff, 0xffffffff, 0xffffffff));
   }
 
   /// @brief generate a random polynomial in GF_(2^128)

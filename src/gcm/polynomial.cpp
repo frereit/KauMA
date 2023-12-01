@@ -121,6 +121,23 @@ GCM::Polynomial &GCM::Polynomial::operator/=(const Polynomial &rhs) {
   return *this;
 }
 
+GCM::Polynomial GCM::Polynomial::pow(__m128i exponent) const {
+  __m128i lowest_bit = _mm_setr_epi32(0x1, 0, 0, 0);
+  Polynomial out = Polynomial::one();
+  Polynomial base = *this;
+  while (!_mm_test_all_zeros(exponent, exponent)) {
+    if (!_mm_testz_si128(exponent, lowest_bit)) {
+      out *= base;
+    }
+    __m128i shifted = _mm_srli_epi32(exponent, 1);
+    __m128i carry = _mm_slli_epi32(exponent, 31);
+    carry = _mm_srli_si128(carry, 4);
+    exponent = _mm_or_si128(shifted, carry);
+    base *= base;
+  }
+  return out;
+}
+
 GCM::Polynomial GCM::Polynomial::random() {
   static std::random_device rd;
   static std::mt19937_64 gen(rd());

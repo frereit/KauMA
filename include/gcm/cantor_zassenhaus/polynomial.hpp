@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include <bitset>
 #include <cassert>
 #include <cppcodec/base64_default_rfc4648.hpp>
 #include <iostream>

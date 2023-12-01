@@ -65,7 +65,8 @@ $(function() {
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">GCM Namespace Reference</div>  </div>
 </div><!--header-->
@@ -96,8 +97,11 @@ Functions</h2></td></tr>
 <tr class="memitem:a670778a455143331ed325683337e2798"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGCM.html#a670778a455143331ed325683337e2798">ghash</a> (std::vector&lt; std::uint8_t &gt; ciphertext, std::vector&lt; std::uint8_t &gt; associated_data, std::vector&lt; std::uint8_t &gt; key)</td></tr>
 <tr class="memdesc:a670778a455143331ed325683337e2798"><td class="mdescLeft">&#160;</td><td class="mdescRight">compute an auth tag for a given ciphertext  <a href="namespaceGCM.html#a670778a455143331ed325683337e2798">More...</a><br /></td></tr>
 <tr class="separator:a670778a455143331ed325683337e2798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81c23267f71ae25efcfcb0161f955094"><td class="memItemLeft" align="right" valign="top">const std::bitset&lt; 128 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGCM.html#a81c23267f71ae25efcfcb0161f955094">REDUCTION_POLYNOMIAL</a> (&quot;00000000000000000000000000000000000000000000000000000000000000000000000000&quot; &quot;000000000000000000000000000000000000000000000010000111&quot;)</td></tr>
-<tr class="separator:a81c23267f71ae25efcfcb0161f955094"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a13eb3ab5e616c37d0537a317996add8e"><td class="memItemLeft" align="right" valign="top">const __m128i&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGCM.html#a13eb3ab5e616c37d0537a317996add8e">REDUCTION_POLYNOMIAL</a></td></tr>
+<tr class="separator:a13eb3ab5e616c37d0537a317996add8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a670778a455143331ed325683337e2798"></a>
@@ -146,22 +150,21 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a81c23267f71ae25efcfcb0161f955094"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a81c23267f71ae25efcfcb0161f955094">&#9670;&nbsp;</a></span>REDUCTION_POLYNOMIAL()</h2>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a13eb3ab5e616c37d0537a317996add8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13eb3ab5e616c37d0537a317996add8e">&#9670;&nbsp;</a></span>REDUCTION_POLYNOMIAL</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const std::bitset&lt;128&gt; GCM::REDUCTION_POLYNOMIAL </td>
-          <td>(</td>
-          <td class="paramtype">&quot;00000000000000000000000000000000000000000000000000000000000000000000000000&quot; &quot;000000000000000000000000000000000000000000000010000111&quot;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td class="memname">const __m128i GCM::REDUCTION_POLYNOMIAL</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">= _mm_setr_epi64(</div>
+<div class="line">    _mm_set_pi64x(0), _mm_set_pi64x(1 &lt;&lt; 7 | 1 &lt;&lt; 2 | 1 &lt;&lt; 1 | 1 &lt;&lt; 0))</div>
+</div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->

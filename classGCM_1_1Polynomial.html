@@ -80,18 +80,20 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5ae94d08ad8ad4772907a39a8fc9bc17"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#a5ae94d08ad8ad4772907a39a8fc9bc17">Polynomial</a> (const std::bitset&lt; 128 &gt; &amp;polynomial)</td></tr>
-<tr class="memdesc:a5ae94d08ad8ad4772907a39a8fc9bc17"><td class="mdescLeft">&#160;</td><td class="mdescRight">construct a new <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> over F_(2^128) from a list of factors  <a href="classGCM_1_1Polynomial.html#a5ae94d08ad8ad4772907a39a8fc9bc17">More...</a><br /></td></tr>
-<tr class="separator:a5ae94d08ad8ad4772907a39a8fc9bc17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0d9b003f40ee6771f26f8233b2f01d6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#ae0d9b003f40ee6771f26f8233b2f01d6">Polynomial</a> (const __m128i polynomial)</td></tr>
+<tr class="memdesc:ae0d9b003f40ee6771f26f8233b2f01d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">construct a new <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> over F_(2^128) from a list of factors in <a class="el" href="namespaceGCM.html">GCM</a> convention (i.e. reversed)  <a href="classGCM_1_1Polynomial.html#ae0d9b003f40ee6771f26f8233b2f01d6">More...</a><br /></td></tr>
+<tr class="separator:ae0d9b003f40ee6771f26f8233b2f01d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af296f1c8b54fc44a977502d85496fc97"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#af296f1c8b54fc44a977502d85496fc97">Polynomial</a> (const std::uint64_t high, const std::uint64_t low)</td></tr>
+<tr class="memdesc:af296f1c8b54fc44a977502d85496fc97"><td class="mdescLeft">&#160;</td><td class="mdescRight">construct a new <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> over F_(2^128) from a list of factors in <a class="el" href="namespaceGCM.html">GCM</a> convention (i.e. reversed)  <a href="classGCM_1_1Polynomial.html#af296f1c8b54fc44a977502d85496fc97">More...</a><br /></td></tr>
+<tr class="separator:af296f1c8b54fc44a977502d85496fc97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fe4de5fca92d16208712a1c9b8890e6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#a3fe4de5fca92d16208712a1c9b8890e6">to_gcm_bytes</a> ()</td></tr>
 <tr class="memdesc:a3fe4de5fca92d16208712a1c9b8890e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">convert the <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> to a representation as specified in NIST Special Publication 800-38D, page 12.  <a href="classGCM_1_1Polynomial.html#a3fe4de5fca92d16208712a1c9b8890e6">More...</a><br /></td></tr>
 <tr class="separator:a3fe4de5fca92d16208712a1c9b8890e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d807c3ecec4db10cc23dd7e040aa9b6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#a6d807c3ecec4db10cc23dd7e040aa9b6">to_exponents</a> ()</td></tr>
-<tr class="memdesc:a6d807c3ecec4db10cc23dd7e040aa9b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">convert the <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> to the list of exponents.  <a href="classGCM_1_1Polynomial.html#a6d807c3ecec4db10cc23dd7e040aa9b6">More...</a><br /></td></tr>
-<tr class="separator:a6d807c3ecec4db10cc23dd7e040aa9b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91306d604a7f018964293cfefb53284f"><td class="memTemplParams" colspan="2">template&lt;std::size_t l&gt; </td></tr>
-<tr class="memitem:a91306d604a7f018964293cfefb53284f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#a91306d604a7f018964293cfefb53284f">pow</a> (std::bitset&lt; l &gt; exponents) const</td></tr>
-<tr class="separator:a91306d604a7f018964293cfefb53284f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ad03a68c3b9550172889ac984600f7e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#a4ad03a68c3b9550172889ac984600f7e">to_exponents</a> () const</td></tr>
+<tr class="memdesc:a4ad03a68c3b9550172889ac984600f7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">convert the <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> to the list of exponents.  <a href="classGCM_1_1Polynomial.html#a4ad03a68c3b9550172889ac984600f7e">More...</a><br /></td></tr>
+<tr class="separator:a4ad03a68c3b9550172889ac984600f7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99c64e7acfe94950065823d0febf65bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#a99c64e7acfe94950065823d0febf65bd">pow</a> (__m128i exponent) const</td></tr>
+<tr class="separator:a99c64e7acfe94950065823d0febf65bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad64d62962f8bf82b2e665f6b1ccdfadd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#ad64d62962f8bf82b2e665f6b1ccdfadd">modular_inverse</a> () const</td></tr>
 <tr class="separator:ad64d62962f8bf82b2e665f6b1ccdfadd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b05243dca42ced10b30c4595b8d8672"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#a9b05243dca42ced10b30c4595b8d8672">operator+=</a> (const <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> &amp;rhs)</td></tr>
@@ -105,6 +107,10 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:acced73b54969b2c9d6c22db5ac6bd335"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#acced73b54969b2c9d6c22db5ac6bd335">one</a> ()</td></tr>
+<tr class="separator:acced73b54969b2c9d6c22db5ac6bd335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a592ee55d55c6b42eb1dd75f64e955caa"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#a592ee55d55c6b42eb1dd75f64e955caa">zero</a> ()</td></tr>
+<tr class="separator:a592ee55d55c6b42eb1dd75f64e955caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c0827e41c3979be38adf7732e9a6156"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGCM_1_1Polynomial.html#a5c0827e41c3979be38adf7732e9a6156">from_gcm_bytes</a> (const std::vector&lt; std::uint8_t &gt; &amp;gcm_bytes)</td></tr>
 <tr class="memdesc:a5c0827e41c3979be38adf7732e9a6156"><td class="mdescLeft">&#160;</td><td class="mdescRight">construct a new <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> over F_(2^128) from a list of bytes, ordered as in specified in NIST Special Publication 800-38D, page 12.  <a href="classGCM_1_1Polynomial.html#a5c0827e41c3979be38adf7732e9a6156">More...</a><br /></td></tr>
 <tr class="separator:a5c0827e41c3979be38adf7732e9a6156"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,8 +139,8 @@ Friends</h2></td></tr>
 <tr class="separator:ae6771e14c58ec1ed42745106a947a4cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5ae94d08ad8ad4772907a39a8fc9bc17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ae94d08ad8ad4772907a39a8fc9bc17">&#9670;&nbsp;</a></span>Polynomial()</h2>
+<a id="ae0d9b003f40ee6771f26f8233b2f01d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0d9b003f40ee6771f26f8233b2f01d6">&#9670;&nbsp;</a></span>Polynomial() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -145,7 +151,7 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">GCM::Polynomial::Polynomial </td>
           <td>(</td>
-          <td class="paramtype">const std::bitset&lt; 128 &gt; &amp;&#160;</td>
+          <td class="paramtype">const __m128i&#160;</td>
           <td class="paramname"><em>polynomial</em></td><td>)</td>
           <td></td>
         </tr>
@@ -157,10 +163,55 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>construct a new <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> over F_(2^128) from a list of factors </p>
+<p>construct a new <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> over F_(2^128) from a list of factors in <a class="el" href="namespaceGCM.html">GCM</a> convention (i.e. reversed) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">polynomial</td><td><code>polynomial</code> [i] is the factor of x^i </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af296f1c8b54fc44a977502d85496fc97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af296f1c8b54fc44a977502d85496fc97">&#9670;&nbsp;</a></span>Polynomial() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GCM::Polynomial::Polynomial </td>
+          <td>(</td>
+          <td class="paramtype">const std::uint64_t&#160;</td>
+          <td class="paramname"><em>high</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::uint64_t&#160;</td>
+          <td class="paramname"><em>low</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>construct a new <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> over F_(2^128) from a list of factors in <a class="el" href="namespaceGCM.html">GCM</a> convention (i.e. reversed) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">high</td><td>factors 0 to 63 </td></tr>
+    <tr><td class="paramname">low</td><td>factors 64 to 127 </td></tr>
   </table>
   </dd>
 </dl>
@@ -263,6 +314,31 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="acced73b54969b2c9d6c22db5ac6bd335"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acced73b54969b2c9d6c22db5ac6bd335">&#9670;&nbsp;</a></span>one()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> GCM::Polynomial::one </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad23f00d604f827db48432bf7840fe343"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad23f00d604f827db48432bf7840fe343">&#9670;&nbsp;</a></span>operator*=()</h2>
 
@@ -343,30 +419,20 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a91306d604a7f018964293cfefb53284f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91306d604a7f018964293cfefb53284f">&#9670;&nbsp;</a></span>pow()</h2>
+<a id="a99c64e7acfe94950065823d0febf65bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99c64e7acfe94950065823d0febf65bd">&#9670;&nbsp;</a></span>pow()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;std::size_t l&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> GCM::Polynomial::pow </td>
+          <td class="memname"><a class="el" href="classGCM_1_1Polynomial.html">GCM::Polynomial</a> GCM::Polynomial::pow </td>
           <td>(</td>
-          <td class="paramtype">std::bitset&lt; l &gt;&#160;</td>
-          <td class="paramname"><em>exponents</em></td><td>)</td>
+          <td class="paramtype">__m128i&#160;</td>
+          <td class="paramname"><em>exponent</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -399,8 +465,8 @@ template&lt;std::size_t l&gt; </div>
 
 </div>
 </div>
-<a id="a6d807c3ecec4db10cc23dd7e040aa9b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d807c3ecec4db10cc23dd7e040aa9b6">&#9670;&nbsp;</a></span>to_exponents()</h2>
+<a id="a4ad03a68c3b9550172889ac984600f7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ad03a68c3b9550172889ac984600f7e">&#9670;&nbsp;</a></span>to_exponents()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -409,7 +475,7 @@ template&lt;std::size_t l&gt; </div>
           <td class="memname">std::vector&lt; std::uint8_t &gt; GCM::Polynomial::to_exponents </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -436,6 +502,31 @@ template&lt;std::size_t l&gt; </div>
 
 <p>convert the <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> to a representation as specified in NIST Special Publication 800-38D, page 12. </p>
 <dl class="section return"><dt>Returns</dt><dd>the factors for the polynomial. gcm_bytes[0]'s MSB represents the factor of x^0, gcm_bytes[0]'s LSB represents the factor of x^7, and so on. </dd></dl>
+
+</div>
+</div>
+<a id="a592ee55d55c6b42eb1dd75f64e955caa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a592ee55d55c6b42eb1dd75f64e955caa">&#9670;&nbsp;</a></span>zero()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classGCM_1_1Polynomial.html">Polynomial</a> GCM::Polynomial::zero </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

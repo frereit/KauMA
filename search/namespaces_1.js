@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['bytemanipulation_141',['ByteManipulation',['../namespaceByteManipulation.html',1,'']]],
-  ['bytenigma_142',['Bytenigma',['../namespaceBytenigma.html',1,'']]]
+  ['bytemanipulation_148',['ByteManipulation',['../namespaceByteManipulation.html',1,'']]],
+  ['bytenigma_149',['Bytenigma',['../namespaceBytenigma.html',1,'']]]
 ];

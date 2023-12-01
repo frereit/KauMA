@@ -145,3 +145,78 @@ GCM::Polynomial GCM::Polynomial::random() {
   __m128i x = _mm_setr_epi64(_mm_set_pi64x(dis(gen)), _mm_set_pi64x(dis(gen)));
   return GCM::Polynomial(x);
 }
+
+#ifdef TEST
+#include "doctest.h"
+
+TEST_CASE("polynomial gcm bytes conversions") {
+  std::vector<std::uint8_t> gcm_bytes = {0xf0, 0xf0, 0xf0, 0xf0, 0x0f, 0x0f,
+                                         0x0f, 0x0f, 0xf0, 0xf0, 0xf0, 0xf0,
+                                         0x0f, 0x0f, 0x0f, 0x0f};
+  GCM::Polynomial actual = GCM::Polynomial::from_gcm_bytes(gcm_bytes);
+  GCM::Polynomial expected =
+      GCM::Polynomial(0xf0f0f0f00f0f0f0f, 0xf0f0f0f00f0f0f0f);
+  CHECK(actual == expected);
+
+  // in reverse should work as well
+  CHECK(expected.to_gcm_bytes() == gcm_bytes);
+}
+
+TEST_CASE("polynomial factor conversions") {
+  std::vector<std::uint8_t> exponents = {0, 1, 2, 3, 125, 126, 127};
+  GCM::Polynomial actual = GCM::Polynomial::from_exponents(exponents);
+  GCM::Polynomial expected = GCM::Polynomial(0xf000000000000000, 0x7);
+  CHECK(actual == expected);
+  CHECK(expected.to_exponents() == exponents);
+}
+
+TEST_CASE("polynomial addition") {
+  GCM::Polynomial a = GCM::Polynomial::from_exponents(
+      {0, 1, 2, 3, 10, 11, 12, 13, 125, 126, 127});
+  GCM::Polynomial b =
+      GCM::Polynomial::from_exponents({1, 2, 4, 11, 12, 13, 32, 127});
+  GCM::Polynomial expected =
+      GCM::Polynomial::from_exponents({0, 3, 4, 10, 32, 125, 126});
+
+  CHECK(a + b == expected);
+}
+
+TEST_CASE("polynomial multiplication") {
+  GCM::Polynomial a = GCM::Polynomial(0xfdbadcb514af3c8e, 0x7436ab83ac71aea6);
+  GCM::Polynomial alpha = GCM::Polynomial::from_exponents({1});
+
+  GCM::Polynomial a_times_alpha =
+      GCM::Polynomial(0x7edd6e5a8a579e47, 0x3a1b55c1d638d753);
+  GCM::Polynomial a_times_alpha_squared =
+      GCM::Polynomial(0xde6eb72d452bcf23, 0x9d0daae0eb1c6ba9);
+
+  CHECK(a * alpha == a_times_alpha);
+  CHECK(a * alpha * alpha == a_times_alpha_squared);
+
+  GCM::Polynomial b = GCM::Polynomial(0xef7837cbabc961ec, 0x4c151fe393dacc52);
+  GCM::Polynomial a_times_b =
+      GCM::Polynomial(0xe2d3e4b7fce39ed7, 0xb6a75bb0f49bc147);
+
+  CHECK(a * b == a_times_b);
+}
+
+TEST_CASE("polynomial inverse") {
+  GCM::Polynomial a = GCM::Polynomial(0xfdbadcb514af3c8e, 0x7436ab83ac71aea6);
+  GCM::Polynomial a_inv =
+      GCM::Polynomial(0x2eca9f04beb1572f, 0x52e0c5e279ba7d7c);
+
+  CHECK(a.modular_inverse() == a_inv);
+  CHECK(a * a_inv == GCM::Polynomial::one());
+}
+
+TEST_CASE("polynomial division") {
+  GCM::Polynomial a = GCM::Polynomial(0xfdbadcb514af3c8e, 0x7436ab83ac71aea6);
+  GCM::Polynomial b = GCM::Polynomial(0xef7837cbabc961ec, 0x4c151fe393dacc52);
+
+  GCM::Polynomial a_div_b =
+      GCM::Polynomial(0x76fbadd3f9bf76bf, 0x70ead1484745c982);
+  CHECK(a / b == a_div_b);
+  CHECK(b * a_div_b == a);
+}
+
+#endif

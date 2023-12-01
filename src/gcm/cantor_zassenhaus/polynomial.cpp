@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "gcm/cantor_zassenhaus/polynomial.hpp"
+#include "gcm/polynomial.hpp"
 
 GCM::CantorZassenhaus::Polynomial &
 GCM::CantorZassenhaus::Polynomial::operator+=(
@@ -97,3 +98,30 @@ nlohmann::json GCM::CantorZassenhaus::Polynomial::to_json() {
   }
   return nlohmann::json(coefficients);
 }
+
+#ifdef TEST
+#include "doctest.h"
+
+TEST_CASE("Cantor-Zassenhaus polynomial arithmetic") {
+  GCM::CantorZassenhaus::Polynomial product(
+      {GCM::Polynomial(0x7a9c3400001a584b, 0xb29b0a03b7971984),
+       GCM::Polynomial(0x1b81c000000000a9, 0xd95c170026d05960),
+       GCM::Polynomial(0xf438000000000000, 0x00c45e91cfdc121e),
+       GCM::Polynomial(0x0000000000000000, 0x00000000de6df8f8),
+       GCM::Polynomial::one()});
+
+  GCM::CantorZassenhaus::Polynomial factor_a(
+      {GCM::Polynomial(0x0000000000000000, 0x0000000000c0ffee),
+       GCM::Polynomial::one()});
+  GCM::CantorZassenhaus::Polynomial factor_b(
+      {GCM::Polynomial(0x05df800000000000, 0x19464ea44524eaf9),
+       GCM::Polynomial(0xe818000000000000, 0x0000bf66d09ce402),
+       GCM::Polynomial(0x0000000000000000, 0x00000000dead0716),
+       GCM::Polynomial::one()});
+
+  CHECK(factor_a * factor_b == product);
+  auto [quotient, remainder] = product.divmod(factor_a);
+  CHECK(quotient == factor_b);
+  CHECK(remainder.empty());
+}
+#endif

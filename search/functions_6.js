@@ -1,13 +1,20 @@
 var searchData=
 [
-  ['gcd_214',['gcd',['../namespaceGCM_1_1CantorZassenhaus.html#a8803689cca6c51ff26328688fec7af32',1,'GCM::CantorZassenhaus']]],
-  ['gcm_5fblock2poly_215',['gcm_block2poly',['../namespaceActions.html#a2a30b4742c23ec26bd415978c91b1652',1,'Actions']]],
-  ['gcm_5fclmul_216',['gcm_clmul',['../namespaceActions.html#a7ee0abdeba0356d1f45d65339af8f1af',1,'Actions']]],
-  ['gcm_5fpoly2block_217',['gcm_poly2block',['../namespaceActions.html#ad665f9916a5510fc362d876413c20be6',1,'Actions']]],
-  ['gcm_5frecover_218',['gcm_recover',['../namespaceActions.html#a661270de7c9dd2cb19f7380af6d9087a',1,'Actions']]],
-  ['gen_5fauth_5ftag_219',['gen_auth_tag',['../namespaceGCM_1_1Recovery.html#a97696e7e08753ac316758673e4e67a43',1,'GCM::Recovery']]],
-  ['gen_5fauth_5ftag_5fmask_220',['gen_auth_tag_mask',['../namespaceGCM_1_1Recovery.html#a3ef61eb6d273d63bb581875944fe84d9',1,'GCM::Recovery']]],
-  ['gen_5fpoly_221',['gen_poly',['../namespaceGCM_1_1Recovery.html#a8d2f5f59df7b49ffe4fac3720b4af656',1,'GCM::Recovery']]],
-  ['ghash_222',['GHASH',['../classGCM_1_1GHASH.html#a2896e2938a0434fd4c6a7a8453769e5f',1,'GCM::GHASH']]],
-  ['ghash_223',['ghash',['../namespaceGCM.html#a670778a455143331ed325683337e2798',1,'GCM']]]
+  ['gcd_223',['gcd',['../namespaceGCM_1_1CantorZassenhaus.html#a8803689cca6c51ff26328688fec7af32',1,'GCM::CantorZassenhaus']]],
+  ['gcm_5fblock2poly_224',['gcm_block2poly',['../namespaceActions.html#a2a30b4742c23ec26bd415978c91b1652',1,'Actions']]],
+  ['gcm_5fclmul_225',['gcm_clmul',['../namespaceActions.html#a7ee0abdeba0356d1f45d65339af8f1af',1,'Actions']]],
+  ['gcm_5fpoly2block_226',['gcm_poly2block',['../namespaceActions.html#ad665f9916a5510fc362d876413c20be6',1,'Actions']]],
+  ['gcm_5fpoly_5fadd_227',['gcm_poly_add',['../namespaceActions.html#afb7db5fc99913acae088672be290fa0d',1,'Actions']]],
+  ['gcm_5fpoly_5fdiv_228',['gcm_poly_div',['../namespaceActions.html#a926be3a8507ec6deac74eee5411cb698',1,'Actions']]],
+  ['gcm_5fpoly_5fgcd_229',['gcm_poly_gcd',['../namespaceActions.html#acdf51c6e305a49e0086d4ab454e2ccdf',1,'Actions']]],
+  ['gcm_5fpoly_5fmod_230',['gcm_poly_mod',['../namespaceActions.html#ac3dfc15899ff7120f4ef16382dcd791a',1,'Actions']]],
+  ['gcm_5fpoly_5fmul_231',['gcm_poly_mul',['../namespaceActions.html#aef59e0dad1ff8a2dc72c6efb5a5663d2',1,'Actions']]],
+  ['gcm_5fpoly_5fpow_232',['gcm_poly_pow',['../namespaceActions.html#afe161a875448871b37d6c7bc9f7b84d4',1,'Actions']]],
+  ['gcm_5fpoly_5fpowmod_233',['gcm_poly_powmod',['../namespaceActions.html#ad79f40395ecbbaca10c9afe9514d0179',1,'Actions']]],
+  ['gcm_5frecover_234',['gcm_recover',['../namespaceActions.html#a661270de7c9dd2cb19f7380af6d9087a',1,'Actions']]],
+  ['gen_5fauth_5ftag_235',['gen_auth_tag',['../namespaceGCM_1_1Recovery.html#a97696e7e08753ac316758673e4e67a43',1,'GCM::Recovery']]],
+  ['gen_5fauth_5ftag_5fmask_236',['gen_auth_tag_mask',['../namespaceGCM_1_1Recovery.html#a3ef61eb6d273d63bb581875944fe84d9',1,'GCM::Recovery']]],
+  ['gen_5fpoly_237',['gen_poly',['../namespaceGCM_1_1Recovery.html#a8d2f5f59df7b49ffe4fac3720b4af656',1,'GCM::Recovery']]],
+  ['ghash_238',['GHASH',['../classGCM_1_1GHASH.html#a2896e2938a0434fd4c6a7a8453769e5f',1,'GCM::GHASH']]],
+  ['ghash_239',['ghash',['../namespaceGCM.html#a670778a455143331ed325683337e2798',1,'GCM']]]
 ];

@@ -1,0 +1,13 @@
+{
+    "action": "gcm-poly-add",
+    "a": [
+        "BAAAAAAAAAAAAAAAAAAAAA==",
+        "AgAAAAAAAAAAAAAAAAAAAA==",
+        "AcAAAAAAAAAAAAAAAAAAAA=="
+    ],
+    "b": [
+        "JGAAAAAAAAAAAAAAAAAAAA==",
+        "AAgAAAAAAAAAAAAAAAAAAA==",
+        "EUAAAAAAAAAAAAAAAAAAAA=="
+    ]
+}

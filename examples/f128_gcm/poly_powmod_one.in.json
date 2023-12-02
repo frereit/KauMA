@@ -1,0 +1,12 @@
+{
+    "action": "gcm-poly-powmod",
+    "base": [
+        "gAAAAAAAAAAAAAAAAAAAAA=="
+    ],
+    "exponent": 77826303,
+    "modulo": [
+        "AAAAAAAAAAAAAAAAAAAAAA==",
+        "AAAAAAAAAAAAAAAAAAAAAA==",
+        "gAAAAAAAAAAAAAAAAAAAAA=="
+    ]
+}

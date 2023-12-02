@@ -1,0 +1,9 @@
+{
+    "action": "gcm-poly-pow",
+    "base": [
+        "BAAAAAAAAAAAAAAAAAAAAA==",
+        "AgAAAAAAAAAAAAAAAAAAAA==",
+        "AcAAAAAAAAAAAAAAAAAAAA=="
+    ],
+    "exponent": 3
+}

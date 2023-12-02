@@ -120,6 +120,18 @@ nlohmann::json GCM::CantorZassenhaus::Polynomial::to_json() {
   return nlohmann::json(coefficients);
 }
 
+GCM::CantorZassenhaus::Polynomial
+GCM::CantorZassenhaus::Polynomial::from_json(nlohmann::json json) {
+  std::vector<std::string> coefficients_json =
+      json.get<std::vector<std::string>>();
+  std::vector<GCM::Polynomial> coefficients;
+  for (std::size_t i = 0; i < coefficients_json.size(); ++i) {
+    coefficients.push_back(GCM::Polynomial::from_gcm_bytes(
+        cppcodec::base64_rfc4648::decode(coefficients_json.at(i))));
+  }
+  return coefficients;
+}
+
 #ifdef TEST
 #include "doctest.h"
 

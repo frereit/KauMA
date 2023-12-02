@@ -16,7 +16,14 @@ const std::map<std::string, Glue::glue_function> ACTIONS = {
     {"gcm-clmul", Actions::gcm_clmul},
     {"gcm-encrypt", Actions::aes_128_gcm_encrypt},
     {"cantor-zassenhaus", Actions::cantor_zassenhaus},
-    {"gcm-recover", Actions::gcm_recover}};
+    {"gcm-recover", Actions::gcm_recover},
+    {"gcm-poly-add", Actions::gcm_poly_add},
+    {"gcm-poly-mul", Actions::gcm_poly_mul},
+    {"gcm-poly-gcd", Actions::gcm_poly_gcd},
+    {"gcm-poly-div", Actions::gcm_poly_div},
+    {"gcm-poly-mod", Actions::gcm_poly_mod},
+    {"gcm-poly-pow", Actions::gcm_poly_pow},
+    {"gcm-poly-powmod", Actions::gcm_poly_powmod}};
 
 nlohmann::json execute_action(const nlohmann::json &input);
 } // namespace Glue

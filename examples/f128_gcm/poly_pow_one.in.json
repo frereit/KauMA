@@ -1,0 +1,7 @@
+{
+    "action": "gcm-poly-pow",
+    "base": [
+        "gAAAAAAAAAAAAAAAAAAAAA=="
+    ],
+    "exponent": 18446744073709551615
+}

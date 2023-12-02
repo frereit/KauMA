@@ -1,0 +1,14 @@
+{
+    "action": "gcm-poly-powmod",
+    "base": [
+        "BAAAAAAAAAAAAAAAAAAAAA==",
+        "AgAAAAAAAAAAAAAAAAAAAA==",
+        "AcAAAAAAAAAAAAAAAAAAAA=="
+    ],
+    "exponent": 1000000,
+    "modulo": [
+        "JGAAAAAAAAAAAAAAAAAAAA==",
+        "AAgAAAAAAAAAAAAAAAAAAA==",
+        "EUAAAAAAAAAAAAAAAAAAAA=="
+    ]
+}

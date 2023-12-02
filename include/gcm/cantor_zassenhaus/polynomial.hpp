@@ -107,6 +107,7 @@ public:
   static Polynomial random(std::size_t degree);
 
   nlohmann::json to_json();
+  static Polynomial from_json(nlohmann::json json);
 
   friend std::ostream &operator<<(std::ostream &os, Polynomial &poly) {
     if (poly.empty())

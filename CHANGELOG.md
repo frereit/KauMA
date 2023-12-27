@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.1.0](https://github.com/frereit/KauMA/compare/v1.0.1...v1.1.0) (2023-12-02)
+
+
+### Features
+
+* **cz:** Add Polynomial::from_json ([771332e](https://github.com/frereit/KauMA/commit/771332e5ea803aa329bdda792473aa10efd65f50))
+* **gcm:** Add arithmetic actions ([2b8e286](https://github.com/frereit/KauMA/commit/2b8e286503eef1788f22e5119a19b0f7fcf80d32))
+* **gcm:** Add gcm-poly-add action ([2b8e286](https://github.com/frereit/KauMA/commit/2b8e286503eef1788f22e5119a19b0f7fcf80d32))
+* **gcm:** Add gcm-poly-div action ([2b8e286](https://github.com/frereit/KauMA/commit/2b8e286503eef1788f22e5119a19b0f7fcf80d32))
+* **gcm:** Add gcm-poly-gcd action ([2b8e286](https://github.com/frereit/KauMA/commit/2b8e286503eef1788f22e5119a19b0f7fcf80d32))
+* **gcm:** Add gcm-poly-mod action ([2b8e286](https://github.com/frereit/KauMA/commit/2b8e286503eef1788f22e5119a19b0f7fcf80d32))
+* **gcm:** Add gcm-poly-mul action ([2b8e286](https://github.com/frereit/KauMA/commit/2b8e286503eef1788f22e5119a19b0f7fcf80d32))
+* **gcm:** Add gcm-poly-pow action ([2b8e286](https://github.com/frereit/KauMA/commit/2b8e286503eef1788f22e5119a19b0f7fcf80d32))
+* **gcm:** Add gcm-poly-powmod action ([2b8e286](https://github.com/frereit/KauMA/commit/2b8e286503eef1788f22e5119a19b0f7fcf80d32))
+
 ## [1.0.1](https://github.com/frereit/KauMA/compare/v1.0.0...v1.0.1) (2023-12-01)
 
 
